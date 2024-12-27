@@ -1,0 +1,25 @@
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-light" id="exampleModalLabel">Sign In</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'login_page' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" class="form-control mb-3" name="username" id="username" aria-describedby="emailHelp" placeholder="Username">
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-2">Submit</button>
+                </form>
+            </div>
+            <div class="signup">
+                <p class="float-right text-muted px-4">If not registered, <a href="{% url "register" %}" class="text-muted">register now!</a></p>
+            </div>
+        </div>
+    </div>
+</div>

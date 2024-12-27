@@ -1,0 +1,10 @@
+{% if messages %}
+    <div class="notification show" id="notification" >
+        <ul class="messages" id="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        <button class="close-btn" id="close-btn">&times;</button>
+    </div>
+{% endif %}
