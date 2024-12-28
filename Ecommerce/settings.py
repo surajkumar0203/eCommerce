@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'products',
     'accounts',
-    'home'
+    'home',
 ]
 
 MIDDLEWARE = [
@@ -107,7 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+AUTH_USER_MODEL = "accounts.MyUser"
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -137,3 +137,4 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
