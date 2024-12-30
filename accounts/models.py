@@ -34,7 +34,6 @@ class MyUser(AbstractBaseUser):
     def save(self,*args,**kwargs):
         if not(self.first_name and self.last_name and self.email and self.username):
             raise ValueError("All fields are required")
-        
         super(MyUser,self).save(*args,**kwargs)
 
 
