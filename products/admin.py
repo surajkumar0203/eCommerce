@@ -18,6 +18,7 @@ class ProductAdmin(admin.ModelAdmin):
         "hsn_code",
         "parent_product",
         "maximum_retail_price",
+      
 
         ]
     
@@ -38,6 +39,7 @@ class ProductVariantAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Products,ProductAdmin)
+admin.site.register(ProductImages)
 admin.site.register(VariantOptions)
 admin.site.register(ProductVariant,ProductVariantAdmin)
 admin.site.register(VendorProducts,VendorProductsAdmin)

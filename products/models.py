@@ -49,6 +49,10 @@ class VariantOptions(BaseModel):
     def __str__(self):
         return self.variant_name + " " + self.option_name
 
+class ProductImages(BaseModel):
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name="product_images")
+    image = models.ImageField(upload_to="products/images/")
+
 class ProductVariant(BaseModel):
     product = models.ForeignKey(Products, related_name="product_variants", on_delete=models.CASCADE)
     variant_option = models.ManyToManyField(VariantOptions)

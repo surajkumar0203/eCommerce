@@ -10,6 +10,15 @@ import pandas as pd
 from django.db import transaction
 import random
 
+"""
+    Import pillow library for image processing/uploading
+"""
+from PIL import Image
+
+from django.core.files import File
+from django.core.files.uploadedfile import SimpleUploadedFile
+import os
+
 
 VOLUME_CHOICES = ["500ml", "1L", "2L", "250ml", "100ml"]
 
@@ -91,4 +100,60 @@ def upload_products():
             
     except Exception as e: 
         print(e)
+
+# upload image into products models
+
+def list_files(directory):
+    all_files = []
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            all_files.append({
+                "path": os.path.join(root, file),
+                "name": file
+            })
+
+    return all_files
+
+def getProductFromImage(image_name):
+    try:
+        product_sku = image_name.split(".")[0]
+        product = Products.objects.get(product_sku=product_sku)
+        return True, product,image_name
+    except Exception as e:
+        pass
+    return False, image_name.split(".")[0], "image_name"
+
+
+# to check file is image or not
+def isImage(file):
+    try:
+        with Image.open(file) as img:
+            img.verify()
+            return True
+    except Exception as e:
+        return False
+
+
+def upload_images(path):
+    file_list=list_files(path)
+    for file in file_list:
+        if isImage(file["path"]):
+            try:
+                product_image=getProductFromImage(file["name"])
+                if product_image[0]:
+                    product_obj = product_image[1]
+                    
+                    with open(file["path"], "rb") as f:
+                        # image = File(f)
+                        image = SimpleUploadedFile(file["name"], f.read())
+                        # print("image -> ",image)
+                        # print("file -> ",f)
+                    
+                        ProductImages.objects.create(product=product_obj, image=image)
+            except Exception as e:
+                pass
+upload_images("./images")
+
+
+
 
