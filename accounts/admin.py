@@ -10,8 +10,8 @@ class UserAdmin(BaseUserAdmin):
     
     fieldsets = [
         ("User Credentials", {"fields": ["username","email", "password"]}),
-        ("Personal info", {"fields": ["first_name","last_name"]}),
-        ("Permissions", {"fields": ["is_admin","is_superuser","is_active","is_staff"]}),
+        ("Personal info", {"fields": ["first_name","last_name","email_token"]}),
+        ("Permissions", {"fields": ["is_admin","is_superuser","is_active","is_staff","is_email_verified"]}),
     ]
     
     add_fieldsets = [
@@ -42,5 +42,6 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ["username","first_name","last_name","email"]
     ordering = ["first_name","last_name"]
     filter_horizontal = []
+    readonly_fields = ["email_token"]
 
 

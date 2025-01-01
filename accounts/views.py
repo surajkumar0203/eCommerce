@@ -27,7 +27,7 @@ def register(request):
             )
             user_obj.set_password(password)
             user_obj.save()
-            messages.success(request,"User Created Successfully")
+            messages.success(request,"Check Your Email To Activate Your Account")
             return redirect('/')
         
         except ValueError as e:
@@ -47,6 +47,11 @@ def login_page(request):
         if not user_obj:
             messages.error(request,"User Not Found")
             return redirect('/')
+        
+        if not User.objects.get(username=username).is_email_verified:
+            messages.error(request,"Email Not Verified")
+            return redirect('/')
+
         user_obj=authenticate(username=username,password=password)
         if user_obj is not None:
             login(request,user_obj)
@@ -60,4 +65,17 @@ def login_page(request):
 @login_required(login_url='/')
 def logout_page(request):
     logout(request)
+    return redirect('/')
+
+
+def account_activate(request,token_id): 
+    try:
+        user_obj=User.objects.get(email_token=token_id)
+        user_obj.is_email_verified=True
+        user_obj.save()
+        messages.success(request,"Your Account is Activated")
+    except Exception as e:
+        messages.error(request,"Invalid Token")
+        return redirect('/')
+    
     return redirect('/')
