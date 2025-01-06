@@ -1,0 +1,91 @@
+{% extends "utils/base.html" %}
+{% load custom_filters %}
+
+{% block start %}
+<div class="container mt-5">
+    <div class="row">
+      <div class="col-md-5">
+        <img src="/media/{{product.product.getFirstImage.1}}" class="img-fluid">
+      </div>
+      <div class="col-md-7">
+        <h4 class="pt-5">{{product.product.item_name | first_word}}</h4>
+        <p>{{product.product.category.name}}</p>
+        <div class="rating">
+          <span class="text-warning"><i class="fas fa-star"></i></span>
+          <span class="text-warning"><i class="fas fa-star"></i></span>
+          <span class="text-warning"><i class="fas fa-star"></i></span>
+          <span class="text-warning"><i class="fas fa-star"></i></span>
+        </div>
+        <h4 class="pt-4 pb-3">₹{{product.vendor_selling_price}}</h4>
+        <p class="text-muted">
+          {{product.product.product_description}}
+        </p>
+        <table class="table table-borderless">
+          <tbody>
+            <tr>
+              <th scope="row">Brand</th>
+              <td>{{product.product.brand.name}}</td>
+            </tr>
+            <tr>
+              <th scope="row">product_sku</th>
+              <td>{{product.product.product_sku}}</td>
+            </tr>
+            <tr>
+              <th scope="row">hsn_code</th>
+              <td>{{product.product.hsn_code}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <hr>
+        <div class="row pt-3">
+          <div class="col-md-3">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-plus"></i></span>
+              </div>
+              <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+              <div class="input-group-append">
+                <span class="input-group-text"><i class="fas fa-minus"></i></span>
+              </div>
+            </div>
+          </div>
+    
+
+        </div>
+        
+        {% if product_variants_result %}
+        <h5>Select Product Variant</h5>
+        {% for key,value in product_variants_result.items %}
+          <label class="form-check form-check-inline">
+            
+            <input class="form-check-input" type="checkbox" name="select_variants_result" id="scroll-{{key}}" value="{{key}}"
+              onClick=urlUpdates("{{key}}")>
+            {{value.0}}
+         
+          </label>
+        {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  
+
+  {% include "utils/footer.html" %}
+
+  <script>
+    window.onload = function(){
+      window.scrollTo({
+        top:400,
+        behavior:'smooth',
+      })
+    }
+
+    function urlUpdates(product_sku) {
+      const currentUrl = new URL(window.location.href)
+      currentUrl.searchParams.set('product_sku',product_sku)
+      window.location.href=currentUrl
+      
+    }
+  </script>
+{% endblock start %}
+

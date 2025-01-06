@@ -71,6 +71,10 @@ def logout_page(request):
 def account_activate(request,token_id): 
     try:
         user_obj=User.objects.get(email_token=token_id)
+        if user_obj.is_email_verified:
+            messages.success(request,"Your Account is Already Activated")
+            return redirect('/')
+        
         user_obj.is_email_verified=True
         user_obj.save()
         messages.success(request,"Your Account is Activated")

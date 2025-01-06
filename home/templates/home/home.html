@@ -46,158 +46,31 @@
             <h1 class="pt-5 pb-5">Popular Products</h1>
 
             <div class="row">
-                <div class="col-md-3">
-                    <div class="card">
-                        <img class="card-img-top" src="https://bootstrap-ecommerce.com/bootstrap-ecommerce-html/images/items/1.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">
-                                <a href="https://codepen.io/deep890/pen/oNYdqMx" class="text-dark">Denim shirt</a>
-                            </p>
-                            <h4 class="pb-0 pt-0">$12</h4>
+                {% for product in products %}
+                    <div class="col-md-3 pb-5">
+                        <div class="card pt-5">
+                            {% if product.product.getFirstImage.0 %}
+                                <img style="height: 250px;width: 220px;margin:auto" 
+                                class="card-img-top" src="/media/{{product.product.getFirstImage.1}}" alt="/media/{{product.product.getFirstImage.1}}">
+                            {% else %}
+                                <img style="height: 250px;width: 220px;margin:auto" 
+                                class="card-img-top" src="{{product.product.getFirstImage.1}}" alt="{{product.product.getFirstImage.1}}">
+                            {% endif %}
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <a href="{% url "product_details" product.product.id %}" class="text-dark">{{product.product.item_name}}</a>
+                                </p>
+                                <h4 class="pb-0 pt-0">₹{{product.vendor_selling_price}}</h4>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card">
-                        <img class="card-img-top" src="https://bootstrap-ecommerce.com/bootstrap-ecommerce-html/images/items/2.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">
-                                <a href="" class="text-dark">Leather Jacket</a>
-                            </p>
-                            <h4 class="pb-0">$20</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card">
-                        <img class="card-img-top" src="https://bootstrap-ecommerce.com/bootstrap-ecommerce-html/images/items/3.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">
-                                <a href="" class="text-dark">Denim shorts</a>
-                            </p>
-                            <h4 class="pb-0">$10</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card">
-                        <img class="card-img-top" src="https://bootstrap-ecommerce.com/bootstrap-ecommerce-html/images/items/4.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">
-                                <a href="" class="text-dark">Denim Bag</a>
-                            </p>
-                            <h4 class="pb-0">$5</h4>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
-
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="card mt-3">
-                        <img class="card-img-top" src="https://bootstrap-ecommerce.com/bootstrap-ecommerce-html/images/items/5.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">
-                                <a href="" class="text-dark">Laptop Cover</a>
-                            </p>
-                            <h4 class="pb-0">$10</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card mt-3">
-                        <img class="card-img-top" src="https://bootstrap-ecommerce.com/bootstrap-ecommerce-html/images/items/6.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">
-                                <a href="" class="text-dark"></a>Couch
-                            </p>
-                            <h4 class="pb-0">$890</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card mt-3">
-                        <img class="card-img-top" src="https://bootstrap-ecommerce.com/bootstrap-ecommerce-html/images/items/7.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">
-                                <a href="" class="text-dark">Apple Watch</a>
-                            </p>
-                            <h4 class="pb-0">$600</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mt-3">
-                    <div class="card">
-                        <img class="card-img-top" src="https://bootstrap-ecommerce.com/bootstrap-ecommerce-html/images/items/8.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">
-                                <a href="" class="text-dark">Airpods</a>
-                            </p>
-                            <h4 class="pb-0">$500</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
-    <div class="ok">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-                    <h3 class="mt-5">Download app demo text</h3>
-                    <p>Get an amazing app to make your life easy</p>
-                </div>
-                <div class="col-md-4">
-                    <img src="https://bootstrap-ecommerce.com/bootstrap-ecommerce-html/images/misc/appstore.png" class="mt-5" id="cool">
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                    <ul>
-                        <h6 class="mt-5">Brands</h6>
-                        <li><a href="">Adidas</a></li>
-                        <li><a href="">Puma</a></li>
-                        <li><a href="">Reebok</a></li>
-                        <li><a href="">Nike</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <ul>
-                        <h6 class="mt-5">Company</h6>
-                        <li><a href="">About us</a></li>
-                        <li><a href="">Career</a></li>
-                        <li><a href="">Find a store</a></li>
-                        <li><a href="">Rules and terms</a></li>
-                        <li><a href="">Sitemap</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <ul>
-                        <h6 class="mt-5">Account</h6>
-                        <li><a href="">User Login</a></li>
-                        <li><a href="">User register</a></li>
-                        <li><a href="">Account Setting</a></li>
-                        <li><a href="">My Orders</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <ul>
-                        <h6 class="mt-5">Social</h6>
-                        <li><a href=""><i class="fab fa-facebook"></i> Facebook</a></li>
-                        <li><a href=""><i class="fab fa-twitter"></i> Twitter</a></li>
-                        <li><a href=""><i class="fab fa-instagram"></i> Instagram</a></li>
-                        <li><a href=""><i class="fab fa-youtube"></i> Youtube</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+
+    {% include "utils/footer.html" %}
 
     <!-- Modal -->
     {% include "utils/login_model.html" %}

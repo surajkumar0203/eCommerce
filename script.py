@@ -101,6 +101,19 @@ def upload_products():
     except Exception as e: 
         print(e)
 
+# create vendor products
+def vendor_products():
+    shopkeeper = Shopkeeper.objects.first()
+    products=Products.objects.all()
+    for product in products:
+        VendorProducts.objects.get_or_create(
+            shopkeeper=shopkeeper,
+            product=product,
+            vendor_selling_price=random.randint(5000, 10000),
+            dealer_price=random.randint(3000, 5000)
+        )
+
+
 # upload image into products models
 
 def list_files(directory):
@@ -152,7 +165,7 @@ def upload_images(path):
                         ProductImages.objects.create(product=product_obj, image=image)
             except Exception as e:
                 pass
-upload_images("./images")
+# upload_images("./images")
 
 
 

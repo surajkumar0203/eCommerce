@@ -1,6 +1,7 @@
 from django.contrib import admin
-from accounts.models import MyUser
+from accounts.models import MyUser,Shopkeeper
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+
 
 @admin.register(MyUser)
 class UserAdmin(BaseUserAdmin):
@@ -43,5 +44,12 @@ class UserAdmin(BaseUserAdmin):
     ordering = ["first_name","last_name"]
     filter_horizontal = []
     readonly_fields = ["email_token"]
+
+@admin.register(Shopkeeper)
+class ShopkeeperAdmin(admin.ModelAdmin):
+    list_display = ["id","gst_number","aadhar_number","profile_image","bmp_id","vender_name"]
+    exclude = ["is_active","is_admin","is_staff","is_superuser","is_email_verified","email_token"]
+    
+    
 
 
