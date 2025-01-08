@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from products.models import Category,VendorProducts,ProductVariant
 from django.db.models import Q
+from orders.models import *
+from accounts.models import Customer
+
+
 
 def home(request):
     categories = Category.objects.all()
@@ -23,7 +27,6 @@ def home(request):
         product__parent_product__isnull=True,
         product__product_images__isnull=False
     )
-  
 
     context = {
         "products" : products,
@@ -32,7 +35,7 @@ def home(request):
 
 
 def product_details(request,product_id):
-
+    
     vendor_product=VendorProducts.objects.get(product__id=product_id)
     
     if request.GET.get('product_sku'):
@@ -86,10 +89,25 @@ def product_details(request,product_id):
             result[product_sku].append(variant_string)
         else:
             result[product_sku]=[variant_string]
+# show cart_quantity (when cart_quantity==0 then Remove from Cart button will hide ) 
+    cart_quantity=0
+    try:
+        current_customer = request.user
+        my_user=Customer.objects.get(username=current_customer)
+
+        
+        cart,_=Carts.objects.get_or_create(customer=my_user)
+       
+        cart_item=CartItem.objects.filter(customer=cart,product=vendor_product).first()
+        cart_quantity=cart_item.quantity
+    except:
+        pass
+    
     
     context={
         "product":vendor_product,
-        "product_variants_result":result
+        "product_variants_result":result,
+        "cart_quantity":cart_quantity
     }
     
     return render(request, 'home/product_details.html',context)

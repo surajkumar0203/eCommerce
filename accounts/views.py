@@ -4,6 +4,7 @@ from accounts.models import MyUser as User
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 def register(request):
     if request.method=="POST":
@@ -13,7 +14,7 @@ def register(request):
         email=request.POST.get('email')
         password=request.POST.get('password')
 
-        user_obj=User.objects.filter(username=username)
+        user_obj=User.objects.filter(Q(username=username) | Q(email=email))
 
         if user_obj.exists():
             messages.error(request,"User Already Exists")

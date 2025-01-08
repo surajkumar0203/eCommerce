@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from accounts.manager import MyUserManager
 from django.core.exceptions import ValidationError
+from django.db.models import Count,Q
 
 
 class MyUser(AbstractBaseUser):
@@ -43,6 +44,31 @@ class Customer(MyUser):
     profile_image= models.ImageField(upload_to="customer/",null=True, blank=True)
     
     
+    def getCartItemCount(self):
+        from orders.models import CartItem,Carts
+        '''
+        # Filter object that has customer login and is_paid is false
+            Carts.objects.filter(customer=self,is_paid=False)
+    
+        # Count items that have a login and is_paid=False
+        annotate(cart_item_count=Count('cartItem'))
+
+        # sum total which return aggrate
+        '''
+        
+
+        # first method using annotate
+        cart_items=Carts.objects.filter(customer=self,is_paid=False).annotate(cart_item_count=Count('cartItem')).first()
+        # return sum(cart_items)
+        return cart_items.cart_item_count
+        # return sum(cart_item.cart_item_count for cart_item in cart_items)
+        
+ 
+        # second method   using filter
+        #! return CartItem.objects.filter(customer__customer=self,customer__is_paid=False).count()
+        
+        
+       
 
 class Shopkeeper(MyUser):
     gst_number = models.CharField(max_length=15)

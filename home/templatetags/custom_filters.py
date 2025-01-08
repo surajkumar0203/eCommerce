@@ -7,3 +7,5 @@ def first_word(value):
     first= value.split(" ")[0]
     second= value.split(" ")[1]
     return "".join([first,second])
+
+

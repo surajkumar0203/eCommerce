@@ -41,12 +41,19 @@
           <div class="col-md-3">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fas fa-plus"></i></span>
+              
+                <a href="{% url "add_to_cart" %}?product_id={{ product.product_id }}" class="input-group-text">
+                  Add To Cart
+                </a>
               </div>
-              <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+        
+              {% if cart_quantity %}
               <div class="input-group-append">
-                <span class="input-group-text"><i class="fas fa-minus"></i></span>
+                <a href="{% url "remove_to_cart" %}?product_id={{ product.product_id }}" class="input-group-text">
+                  Remove from Cart
+                </a>
               </div>
+              {% endif %}
             </div>
           </div>
     
