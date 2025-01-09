@@ -23,7 +23,6 @@ def add_to_cart(request):
         cart_item.save()
         
     except Exception as e:
-        
         messages.success(request,"Invailid Product id")
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     
@@ -43,11 +42,16 @@ def remove_to_cart(request):
     
         vendor_products = VendorProducts.objects.get(product=product_id)
         
+        quantity=request.GET.get('quantity')
+       
         cart,_=Carts.objects.get_or_create(customer=my_user)
         cart_item,_=CartItem.objects.get_or_create(customer=cart,product=vendor_products)
-        cart_item.quantity-=1
+        if(quantity):
+           cart_item.quantity-=int(quantity)
+        else:
+            cart_item.quantity-=1
         cart_item.save()
-        if cart_item.quantity<=1:
+        if cart_item.quantity<=0:
             cart_item.delete()
         
     except Exception as e:
@@ -57,3 +61,19 @@ def remove_to_cart(request):
     messages.success(request,"Item removed successfully")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
+
+@login_required(login_url='/accounts/login/')
+def get_cart(request):
+    
+    current_customer = request.user
+    my_user=Customer.objects.get(username=current_customer)
+    cart=Carts.objects.get(customer=my_user)
+    cart_items=CartItem.objects.filter(customer=cart).order_by('product')
+    
+    cart.final_price()
+    context={
+        'cart_items':cart_items,
+        'cart':cart
+    }
+    return render(request,'order/cart.html',context)

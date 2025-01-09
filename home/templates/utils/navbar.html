@@ -36,17 +36,21 @@
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{% url "logout_page" %}">Logout</a></li>
                 </ul>
-                <div class="circle float-right mouse-pointer">
-                    <i class="fas fa-shopping-cart text-muted"></i>
-                    <span class="badge badge-danger">{{request.user.customer.getCartItemCount}}</span>
                 
-                </div>
+                <a href="{% url "get_cart" %}">
+                    <div class="circle float-right mouse-pointer">
+                        <i class="fas fa-shopping-cart text-muted"></i>
+                        <span class="badge badge-danger">{{request.user.customer.getCartItemCount}}</span>
+                    
+                    </div>
+                </a>
             </div>
         {% else %}
             <div class="col-md-3 mt-3 ">
-                
+            
                 <div class="circle float-right mr-4 mouse-pointer" data-target="#exampleModal" data-toggle="modal">
                     <i class="fas fa-user text-muted" ></i>
+                
                 </div>
             </div>
         {% endif %}

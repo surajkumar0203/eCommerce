@@ -1,0 +1,72 @@
+{% extends "utils/base.html" %}
+{% load static %}
+{% block start %}
+<section>
+    <div class="container py-4 px-2">
+        {% if cart_items %}
+        <div>
+            {% for cart_item in cart_items %}
+                <div class="card shadow-lg mb-4 border-2">
+                    <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+                        <div>
+                            <p class="font-weight-bold">{{cart_item.product.product.brand}}</p>
+                        </div>
+                        <div>
+                            <img src="/media/{{cart_item.product.product.getFirstImage.1}}" alt="/media/{{cart_item.product.product.getFirstImage.1}}" class="img-fluid" style="width: 56px;">
+                        </div>
+                        <h6 class="font-weight-bold">{{cart_item.product.product.item_name}}</h6>
+                        
+                        <p class="h4 mb-0">₹{{cart_item.cart_total_price}}</p>
+                        <div class="d-flex align-items-center my-3 border rounded">
+                            <a href="{% url "remove_to_cart" %}?product_id={{cart_item.product.product_id }}" class="btn border-end text-lg px-3">&minus;</a>
+                            <p class="mb-0 px-3 text-center">{{cart_item.quantity}}</p>
+                          
+                            <a href="{% url "add_to_cart" %}?product_id={{cart_item.product.product_id }}" class="btn border-start text-lg px-3" >&#43;</a>
+                        </div>
+                        
+                        <a href="{% url "remove_to_cart" %}?product_id={{cart_item.product.product_id }}&quantity={{cart_item.quantity }}" class="btn btn-primary text-light px-4" >Remove</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <!-- End of cart product loop -->
+
+        <!-- Summary Section -->
+        <div>
+            <section class="d-flex justify-content-end pt-4">
+                <div class="border p-4 w-100 w-md-auto">
+                    <p class="border-bottom pb-2 mb-3 h6">Selected Offer Summary</p>
+                    <div>
+                        <div class="d-flex justify-content-between py-1">
+                            <p class="mb-0">Sub Total:</p>
+                            <p class="mb-0">₹{{cart.get_cart_total_price}}</p>
+                           
+                        </div>
+                        {% if cart.calculate_delivery_fee %}
+                            <div class="d-flex justify-content-between py-1 ">
+                                <p class="mb-0">Delivery Charge:</p>
+                                <p class="mb-0">₹{{cart.calculate_delivery_fee}}</p>
+                            </div>
+                        {% endif %}
+                        <div class="d-flex justify-content-between py-1 border-bottom">
+                            <p class="mb-0">Tax:</p>
+                            <p class="mb-0">₹{{cart.tax}}</p>
+                        </div>
+                        <div class="d-flex justify-content-between py-1">
+                            <p class="mb-0">Final Total:</p>
+                            <p class="mb-0">₹{{cart.final_price}}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        {% else %}
+            <div class="d-flex justify-content-center align-items-center h-100" style="min-height: 24rem;">
+                <img src="{% static "images/cart.png" %}" alt="{% static "images/cart.png" %}" class="img-fluid">
+            </div>
+        {% endif %}
+    </div>
+    
+</section>
+{% include "utils/footer.html" %}
+{% endblock start %}
