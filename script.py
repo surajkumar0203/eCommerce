@@ -167,6 +167,20 @@ def upload_images(path):
                 pass
 # upload_images("./images")
 
+import razorpay
 
+client = razorpay.Client(auth=(config('RazorPay_YOUR_API_KEY'), "y95DZU1zBhOb8ciPOY8grTE7"))
 
+from decouple import config
 
+o=client.order.create({
+  "amount": 50000,
+  "currency": "INR",
+  "receipt": "receipt#1",
+  "partial_payment":False,
+  "notes": {
+    
+  }
+})
+
+print(o)

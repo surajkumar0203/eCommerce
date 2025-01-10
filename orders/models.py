@@ -9,7 +9,10 @@ from django.db.models import Sum,F
 class Carts(models.Model):
     customer=models.ForeignKey(Customer,on_delete=models.CASCADE,related_name="customer_cart")
     is_paid=models.BooleanField(default=False)
-
+    order_id=models.CharField(max_length=200,null=True,blank=True)
+    payment_id=models.CharField(max_length=2000,null=True,blank=True)
+    payment_signature=models.CharField(max_length=5000,null=True,blank=True)
+    
     def calculate_delivery_fee(self):
         delivery_fee=self.cartItem.aggregate(
             d_fee=Sum('product__delivery_price')

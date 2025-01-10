@@ -1,10 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from orders.models import *
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from products.models import VendorProducts,Products
 from django.contrib import messages
 from accounts.models import MyUser,Customer
+from django.views.decorators.csrf import csrf_exempt
+from orders.payments import RazorPayPayment
+import json
+
 
 @login_required(login_url='/accounts/login/')
 def add_to_cart(request):
@@ -71,9 +75,55 @@ def get_cart(request):
     cart=Carts.objects.get(customer=my_user)
     cart_items=CartItem.objects.filter(customer=cart).order_by('product')
     
-    cart.final_price()
+    # payment_process
+    name = f"{my_user.first_name} {my_user.last_name}"
+    amount=cart.final_price()
+    payment=RazorPayPayment("INR")
+    payment_info=payment.process_payment(amount=amount,receipt_name=name)
+    cart.order_id=payment_info['id']
+    cart.save()
+    
     context={
         'cart_items':cart_items,
-        'cart':cart
+        'cart':cart,
+        'payment_info':payment_info,
+        
     }
     return render(request,'order/cart.html',context)
+
+@csrf_exempt
+def success_page(request):
+    razor_pay_ref=request.POST
+    
+    try:
+        if request.method == "POST":
+            # print(razor_pay_ref)
+            payment_id=razor_pay_ref["razorpay_payment_id"]
+            order_id=razor_pay_ref['razorpay_order_id']
+            payment_signature=razor_pay_ref['razorpay_signature']
+            
+    
+            cart=Carts.objects.get(order_id=order_id)
+            cart.payment_id=payment_id
+            cart.is_paid=True
+            cart.payment_signature=payment_signature
+            cart.save()
+            cart_item=CartItem.objects.filter(customer=cart)
+            cart_item.delete()
+            
+            context={
+                "order_id":order_id
+            }
+            return render(request,'order/success_payment.html',context)
+    except:
+        
+        order_id=json.loads(razor_pay_ref['error[metadata]'])
+        description=razor_pay_ref['error[description]']
+        order_id=order_id['order_id']
+        
+        context={
+            "order_id":order_id,
+            "description":description
+        }
+        return render(request,'order/fail_payment.html',context)
+    return redirect("/")

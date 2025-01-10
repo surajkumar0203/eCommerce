@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Failed</title>
+    <link rel="stylesheet" href="{% static "css/payment_fail_style.css" %}"/>
+ 
+</head>
+<body>
+    <div class="failure-container">
+        <div class="failure-card">
+            <div class="icon-container">
+                <svg xmlns="http://www.w3.org/2000/svg" class="failure-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-.01-6a9 9 0 110 18a9 9 0 010-18zm0 0V3m0 18h.01m.01-18H3m18 0h-9m0 18h9M9 12h.01M15 12h.01" />
+                </svg>
+            </div>
+            <h1>Payment Failed</h1>
+            <p>{{description}}</p>
+            <div class="details">
+                <p><strong>Order ID:</strong> {{order_id}}</p>
+                <p><strong>Amount Attempted:</strong> ₹{{amount}}</p>
+                <p>If the issue persists, contact support at <a href="mailto:support@ecommerce.com">support@ecommerce.com</a>.</p>
+            </div>
+    
+            <a href="/" class="button secondary">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

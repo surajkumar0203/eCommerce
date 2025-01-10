@@ -56,13 +56,15 @@ class Customer(MyUser):
         # sum total which return aggrate
         '''
         
-
-        # first method using annotate
-        cart_items=Carts.objects.filter(customer=self,is_paid=False).annotate(cart_item_count=Count('cartItem')).first()
-        # return sum(cart_items)
-        return cart_items.cart_item_count
-        # return sum(cart_item.cart_item_count for cart_item in cart_items)
-        
+        try:
+            # first method using annotate
+            cart_items=Carts.objects.filter(customer=self,is_paid=False).annotate(cart_item_count=Count('cartItem')).first()
+            # return sum(cart_items)
+            
+            return cart_items.cart_item_count
+            # return sum(cart_item.cart_item_count for cart_item in cart_items)
+        except:
+            return 0
  
         # second method   using filter
         #! return CartItem.objects.filter(customer__customer=self,customer__is_paid=False).count()
