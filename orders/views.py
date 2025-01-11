@@ -97,7 +97,6 @@ def success_page(request):
     
     try:
         if request.method == "POST":
-            # print(razor_pay_ref)
             payment_id=razor_pay_ref["razorpay_payment_id"]
             order_id=razor_pay_ref['razorpay_order_id']
             payment_signature=razor_pay_ref['razorpay_signature']
@@ -105,14 +104,17 @@ def success_page(request):
     
             cart=Carts.objects.get(order_id=order_id)
             cart.payment_id=payment_id
-            cart.is_paid=True
+            
             cart.payment_signature=payment_signature
+            amount=cart.final_price()
             cart.save()
+            cart.cart_to_order()
             cart_item=CartItem.objects.filter(customer=cart)
             cart_item.delete()
             
             context={
-                "order_id":order_id
+                "order_id":order_id,
+                "amount":amount
             }
             return render(request,'order/success_payment.html',context)
     except:
@@ -121,9 +123,15 @@ def success_page(request):
         description=razor_pay_ref['error[description]']
         order_id=order_id['order_id']
         
+        cart=Carts.objects.get(order_id=order_id)
+        amount=cart.final_price()
+        print(amount)
         context={
             "order_id":order_id,
-            "description":description
+            "description":description,
+            "amount":amount
         }
         return render(request,'order/fail_payment.html',context)
     return redirect("/")
+
+
