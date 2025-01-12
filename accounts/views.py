@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 # from django.contrib.auth.models import User
-from accounts.models import MyUser as User
+from accounts.models import MyUser as User,Customer
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
@@ -14,13 +14,13 @@ def register(request):
         email=request.POST.get('email')
         password=request.POST.get('password')
 
-        user_obj=User.objects.filter(Q(username=username) | Q(email=email))
+        user_obj=Customer.objects.filter(Q(username=username) | Q(email=email))
 
         if user_obj.exists():
             messages.error(request,"User Already Exists")
             return redirect('/')
         try:
-            user_obj=User.objects.create(
+            user_obj=Customer.objects.create(
                 username=username,
                 first_name=first_name,
                 last_name=last_name,
@@ -44,12 +44,12 @@ def login_page(request):
         username=request.POST.get('username')
         password=request.POST.get('password')
         
-        user_obj=User.objects.filter(username=username).exists()
+        user_obj=Customer.objects.filter(username=username).exists()
         if not user_obj:
             messages.error(request,"User Not Found")
             return redirect('/')
         
-        if not User.objects.get(username=username).is_email_verified:
+        if not Customer.objects.get(username=username).is_email_verified:
             messages.error(request,"Email Not Verified")
             return redirect('/')
 
@@ -71,7 +71,7 @@ def logout_page(request):
 
 def account_activate(request,token_id): 
     try:
-        user_obj=User.objects.get(email_token=token_id)
+        user_obj=Customer.objects.get(email_token=token_id)
         if user_obj.is_email_verified:
             messages.success(request,"Your Account is Already Activated")
             return redirect('/')

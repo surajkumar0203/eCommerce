@@ -38,6 +38,8 @@ class MyUser(AbstractBaseUser):
             raise ValueError("All fields are required")
         super(MyUser,self).save(*args,**kwargs)
 
+    class Meta:
+        abstract = True
 
 
 class Customer(MyUser):
@@ -64,6 +66,7 @@ class Customer(MyUser):
             return cart_items.cart_item_count
             # return sum(cart_item.cart_item_count for cart_item in cart_items)
         except:
+            
             return 0
  
         # second method   using filter

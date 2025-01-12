@@ -2,7 +2,7 @@ from django.db import models
 from accounts.models import Customer,MyUser
 from products.models import VendorProducts
 from django.db.models import Sum,F
-from utils.utility import generate_order_id 
+from utils.utility import generate_order_id ,generate_slug
 
 
 
@@ -49,13 +49,17 @@ class Carts(models.Model):
         )
         
         for cart_item in self.cartItem.all():
+            
             OrderItem.objects.create(
                 product=cart_item.product,
                 order=order,
+                slug=generate_slug(order_id=order.order_id),
                 quantity=cart_item.quantity,
-                price=cart_item.product.vendor_selling_price
+                per_product_price=cart_item.product.vendor_selling_price,
+                total_price=cart_item.product.vendor_selling_price*cart_item.quantity
             )
 
+    
 class CartItem(models.Model):
     customer=models.ForeignKey(Carts,on_delete=models.CASCADE,related_name="cartItem")
     product=models.ForeignKey(VendorProducts,null=True,on_delete=models.SET_NULL,related_name="product_item")
@@ -83,8 +87,19 @@ class Order(models.Model):
         super(Order,self).save(*args, **kwargs)
 
 class OrderItem(models.Model):
+    order_choice=(
+        ("Order Received","Order Received"),
+        ("Order Packed","Order Packed"),
+        ("Order Shipped","Order Shipped"),
+        ("Out Of Delivery","Out Of Delivery"),
+        ("Order Delivered","Order Delivered"),
+    )
     product=models.ForeignKey(VendorProducts,null=True,on_delete=models.SET_NULL,related_name="product_OrderItem")
     order=models.ForeignKey(Order,on_delete=models.CASCADE,related_name="order_orderItem")
     quantity=models.IntegerField(default=0)
-    price=models.FloatField()
+    per_product_price=models.FloatField()
+    total_price=models.FloatField()
+    slug=models.SlugField(unique=True)
+    status=models.CharField(max_length=150,choices=order_choice,default="Order Received")
+
   

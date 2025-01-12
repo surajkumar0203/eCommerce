@@ -31,7 +31,7 @@
                     Manage
                 </button>
                 <ul class="dropdown-menu dropdown-menu-dark">
-                    <li><a class="dropdown-item " href="#">My Order</a></li>
+                    <li><a class="dropdown-item " href="{% url "myorder" %}">My Order</a></li>
                     <li><a class="dropdown-item" href="#">Account</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{% url "logout_page" %}">Logout</a></li>
@@ -40,7 +40,7 @@
                 <a href="{% url "get_cart" %}">
                     <div class="circle float-right mouse-pointer">
                         <i class="fas fa-shopping-cart text-muted"></i>
-                        <span class="badge badge-danger">{{request.user.customer.getCartItemCount}}</span>
+                        <span class="badge badge-danger">{{request.user.getCartItemCount}}</span>
                     
                     </div>
                 </a>

@@ -69,27 +69,30 @@ def remove_to_cart(request):
 
 @login_required(login_url='/accounts/login/')
 def get_cart(request):
-    
-    current_customer = request.user
-    my_user=Customer.objects.get(username=current_customer)
-    cart=Carts.objects.get(customer=my_user)
-    cart_items=CartItem.objects.filter(customer=cart).order_by('product')
-    
-    # payment_process
-    name = f"{my_user.first_name} {my_user.last_name}"
-    amount=cart.final_price()
-    payment=RazorPayPayment("INR")
-    payment_info=payment.process_payment(amount=amount,receipt_name=name)
-    cart.order_id=payment_info['id']
-    cart.save()
-    
-    context={
-        'cart_items':cart_items,
-        'cart':cart,
-        'payment_info':payment_info,
+    try:
+        current_customer = request.user
+        my_user=Customer.objects.get(username=current_customer)
+        cart=Carts.objects.get(customer=my_user)
+        cart_items=CartItem.objects.filter(customer=cart).order_by('product')
         
-    }
-    return render(request,'order/cart.html',context)
+        # payment_process
+        name = f"{my_user.first_name} {my_user.last_name}"
+        amount=cart.final_price()
+        payment=RazorPayPayment("INR")
+        payment_info=payment.process_payment(amount=amount,receipt_name=name)
+        cart.order_id=payment_info['id']
+        cart.save()
+        
+        context={
+            'cart_items':cart_items,
+            'cart':cart,
+            'payment_info':payment_info,
+            
+        }
+        return render(request,'order/cart.html',context)
+    except:
+        pass
+    return render(request,'order/cart.html')
 
 @csrf_exempt
 def success_page(request):
@@ -125,7 +128,6 @@ def success_page(request):
         
         cart=Carts.objects.get(order_id=order_id)
         amount=cart.final_price()
-        print(amount)
         context={
             "order_id":order_id,
             "description":description,
@@ -134,4 +136,26 @@ def success_page(request):
         return render(request,'order/fail_payment.html',context)
     return redirect("/")
 
+@login_required(login_url='/accounts/login/')
+def myorder(request):
+    
+    order_items=OrderItem.objects.filter(order__customer=request.user)
+    
+    context={
+        'order_items':order_items
+    }
+    return render(request,'order/myorder.html',context)
 
+@login_required(login_url='/accounts/login/')
+def track_order(request):
+    
+    track_id=request.GET.get('track_id')
+    try:
+        order_item=OrderItem.objects.get(slug=track_id)
+        context={
+            'order_item':order_item
+        }
+        return render(request,'order/track.html',context)
+    except:
+        pass
+    return redirect("/")

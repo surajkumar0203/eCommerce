@@ -3,16 +3,17 @@ from accounts.models import MyUser,Shopkeeper,Customer
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
-@admin.register(MyUser)
-class UserAdmin(BaseUserAdmin):
-   
-    list_display = ["id","username","first_name","last_name","email","is_active","is_admin"]
+
+
+@admin.register(Shopkeeper)
+class ShopkeeperAdmin(BaseUserAdmin):
+    list_display = ["id","username","first_name","last_name","email"]
     list_filter = ["email"]
     
     fieldsets = [
         ("User Credentials", {"fields": ["username","email", "password"]}),
         ("Personal info", {"fields": ["first_name","last_name","email_token"]}),
-        ("Permissions", {"fields": ["is_admin","is_superuser","is_active","is_staff","is_email_verified"]}),
+        ("Permissions", {"fields": ["is_active","is_staff","is_email_verified"]}),
     ]
     
     add_fieldsets = [
@@ -20,7 +21,7 @@ class UserAdmin(BaseUserAdmin):
             "User Credentials",
             {
                 "classes": ["wide"],
-                "fields": ["username","email", "password"],
+                "fields": ["username","email", "password1", "password2"],
             },
            
             
@@ -29,14 +30,21 @@ class UserAdmin(BaseUserAdmin):
              "Personal info",
             {
                 "classes": ["wide"],
-                "fields": ["first_name","last_name"],
+                "fields": ["first_name","last_name","profile_image"],
+            },
+        ),
+        (
+             "Shop Info",
+            {
+                "classes": ["wide"],
+                "fields": ["gst_number","aadhar_number","bmp_id","vender_name"],
             },
         ),
         (
             "Permissions",
             {
                 "classes": ["wide"],
-                "fields": ["is_admin","is_superuser","is_active","is_staff"],
+                "fields": ["is_active","is_email_verified","is_staff"],
             },
         )
     ]
@@ -45,18 +53,7 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = []
     readonly_fields = ["email_token"]
 
-@admin.register(Shopkeeper)
-class ShopkeeperAdmin(admin.ModelAdmin):
-    list_display = ["id","gst_number","aadhar_number","profile_image","bmp_id","vender_name"]
-    exclude = ["is_active","is_admin","is_staff","is_superuser","is_email_verified","email_token"]
 
-
-
-
-
-
-    
-    
 
 @admin.register(Customer)
 class CustomerAdmin(BaseUserAdmin):
@@ -81,7 +78,7 @@ class CustomerAdmin(BaseUserAdmin):
             
         ),
         (
-             "Personal info",
+            "Personal info",
             {
                 "classes": ["wide"],
                 "fields": ["first_name","last_name","profile_image"],

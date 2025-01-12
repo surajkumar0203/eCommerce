@@ -40,7 +40,7 @@ def generate_random_options(variant_name):
     else:
         return f"{variant_name}-{random.randint(1, 100)}"
     
-def upload_products():
+def upload_products():   #1
     """
         This function uploads products to the database.
         It reads a CSV file containing product details and uploads the products to the database.
@@ -102,7 +102,7 @@ def upload_products():
         print(e)
 
 # create vendor products
-def vendor_products():
+def vendor_products():  #3
     shopkeeper = Shopkeeper.objects.first()
     products=Products.objects.all()
     for product in products:
@@ -153,34 +153,37 @@ def upload_images(path):
         if isImage(file["path"]):
             try:
                 product_image=getProductFromImage(file["name"])
+                
                 if product_image[0]:
                     product_obj = product_image[1]
                     
                     with open(file["path"], "rb") as f:
                         # image = File(f)
                         image = SimpleUploadedFile(file["name"], f.read())
+                        
                         # print("image -> ",image)
                         # print("file -> ",f)
                     
-                        ProductImages.objects.create(product=product_obj, image=image)
+                        ff=ProductImages.objects.create(product=product_obj, image=image)
+                        print(ff)
             except Exception as e:
                 pass
-# upload_images("./images")
+# upload_images("./images")  #2
 
-import razorpay
+# import razorpay
 
-client = razorpay.Client(auth=(config('RazorPay_YOUR_API_KEY'), "y95DZU1zBhOb8ciPOY8grTE7"))
+# client = razorpay.Client(auth=(config('RazorPay_YOUR_API_KEY'), "y95DZU1zBhOb8ciPOY8grTE7"))
 
-from decouple import config
+# from decouple import config
 
-o=client.order.create({
-  "amount": 50000,
-  "currency": "INR",
-  "receipt": "receipt#1",
-  "partial_payment":False,
-  "notes": {
+# o=client.order.create({
+#   "amount": 50000,
+#   "currency": "INR",
+#   "receipt": "receipt#1",
+#   "partial_payment":False,
+#   "notes": {
     
-  }
-})
+#   }
+# })
 
-print(o)
+# print(o)

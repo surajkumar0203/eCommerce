@@ -27,7 +27,7 @@ def home(request):
         product__parent_product__isnull=True,
         product__product_images__isnull=False
     )
-
+   
     context = {
         "products" : products,
     }
