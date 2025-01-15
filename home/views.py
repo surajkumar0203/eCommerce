@@ -1,13 +1,14 @@
 from django.shortcuts import render
-from products.models import Category,VendorProducts,ProductVariant
+from products.models import Category,VendorProducts,ProductVariant,Products
 from django.db.models import Q
 from orders.models import *
 from accounts.models import Customer
-
+from django.contrib.postgres.search import SearchVector,SearchQuery,SearchRank,TrigramSimilarity
 
 
 def home(request):
     categories = Category.objects.all()
+    
     """
     dono ka result same hoga, lekin Q objects ka use karne se code zyada readable aur maintainable hota hai.
 
@@ -22,14 +23,43 @@ def home(request):
     #     Q(product__product_images__isnull=False)
     # )
 
-    # Agar sirf AND conditions use karni hai, toh ye style zyada readable aur simple hai.
-    products = VendorProducts.objects.filter(
-        product__parent_product__isnull=True,
-        product__product_images__isnull=False
-    )
-   
+    #  search product
+    search=request.GET.get('search')
+    if search:
+        query=SearchQuery(search)
+        vector=(
+            SearchVector('product__item_name',weight="A")+
+            SearchVector('product__brand',weight="B")+
+            SearchVector('product__product_sku',weight="C")
+            
+        )
+        
+        rank=SearchRank(vector,query)
+        
+        products= VendorProducts.objects.annotate(
+            rank=rank,
+            similarity=(
+                TrigramSimilarity('product__item_name',search)
+                +TrigramSimilarity('product__product_sku',search)
+                +TrigramSimilarity('product__brand__name',search)
+              
+            )
+            
+        ).order_by('-rank','-similarity').filter(
+            Q(similarity__gte=0.01)|Q(rank__gte=0.01),
+            product__parent_product__isnull=True,
+            product__product_images__isnull=False
+        )
+    else:
+        # Agar sirf AND conditions use karni hai, toh ye style zyada readable aur simple hai.
+        products = VendorProducts.objects.filter(
+            product__parent_product__isnull=True,
+            product__product_images__isnull=False
+        )
+    
     context = {
         "products" : products,
+        "search":search
     }
     return render(request, 'home/home.html',context)
 

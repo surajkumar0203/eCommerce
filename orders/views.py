@@ -139,7 +139,7 @@ def success_page(request):
 @login_required(login_url='/accounts/login/')
 def myorder(request):
     
-    order_items=OrderItem.objects.filter(order__customer=request.user)
+    order_items=OrderItem.objects.filter(order__customer=request.user).order_by('-slug')
     
     context={
         'order_items':order_items
