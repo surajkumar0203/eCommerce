@@ -8,7 +8,8 @@ from accounts.models import MyUser,Customer
 from django.views.decorators.csrf import csrf_exempt
 from orders.payments import RazorPayPayment
 import json
-
+from orders.tasks import send_Email
+from utils.utility import generate_order_pdf
 
 @login_required(login_url='/accounts/login/')
 def add_to_cart(request):
@@ -71,6 +72,7 @@ def remove_to_cart(request):
 def get_cart(request):
     try:
         current_customer = request.user
+        
         my_user=Customer.objects.get(username=current_customer)
         cart=Carts.objects.get(customer=my_user)
         cart_items=CartItem.objects.filter(customer=cart).order_by('product')
@@ -90,7 +92,8 @@ def get_cart(request):
             
         }
         return render(request,'order/cart.html',context)
-    except:
+    except Exception as e:
+       
         pass
     return render(request,'order/cart.html')
 
@@ -112,6 +115,7 @@ def success_page(request):
             amount=cart.final_price()
             cart.save()
             cart.cart_to_order()
+            
             cart_item=CartItem.objects.filter(customer=cart)
             cart_item.delete()
             
@@ -159,3 +163,26 @@ def track_order(request):
     except:
         pass
     return redirect("/")
+
+
+def invoice(request):
+    order=Order.objects.filter(customer=request.user)
+    return render(request,'order/invoicelist.html',{'orders':order})
+
+
+
+@login_required(login_url='/accounts/login/')
+def downloadPdf(request):
+    try:
+        order_id=request.GET.get('orderid')
+
+        orders=Order.objects.filter(customer=request.user,order_id=order_id)
+        if orders.exists():
+            generate_order_pdf(orders.first())
+            res=send_Email.delay(order_id,request.user.email)
+        else:
+            return redirect('/orders/invoice/')
+            
+    except Exception as e:
+        pass
+    return redirect('/orders/invoice/')

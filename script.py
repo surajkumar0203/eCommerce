@@ -187,3 +187,50 @@ def upload_images(path):
 # })
 
 # print(o)
+
+
+from orders.models import Order
+import pdfkit
+from django.template.loader import get_template
+from django.conf import settings
+def generate_order_pdf(instance):
+    # print(order_data)
+    templates_name = 'order/invoice'
+
+    options = {
+        'page-size': 'A4',
+        'margin-top': '0.75in',
+        'margin-right': '0.7in',
+        'margin-bottom': '0.7in',
+        'margin-left': '0.7in',
+        'encoding': "UTF-8",
+        'custom-header': [
+            ('Accept-Encoding', 'gzip')
+        ],
+   
+        'no-outline': None,
+
+    }
+
+    path_to_wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+    template = get_template(f'{templates_name}.html')
+
+    # print(template)
+
+    content = template.render({"order_item":instance.get_order_data()})
+    # print(content)
+  
+    output_path = f"{settings.BASE_DIR}/public/static/pdfs/{instance.order_orderItem.all().first().slug}.pdf"
+    # print(output_path)
+    config=pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
+    # print(config)
+    try:
+        pdfkit.from_string(content,output_path,options=options,configuration=config)
+    except Exception as e:
+        print(f"PDF generation failed: {e}")
+
+order=Order.objects.first()
+# print(order.get_order_data())
+# print(order.order_orderItem.all().first().product.delivery_price)
+# print(order.order_orderItem.slug)
+generate_order_pdf(order)

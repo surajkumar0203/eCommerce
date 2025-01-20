@@ -13,6 +13,9 @@ def send_email_token(sender, instance, created, **kwargs):
             email_token = str(uuid4())
             email=instance.email
             instance.email_token=email_token
-            send_account_activation_email(email_token,email)
+            subject="Account Activation"
+            message=f"Click here to activate your account http://127.0.0.1:8000/accounts/activate_email/{email_token}",
+            message=message[0]
+            send_account_activation_email(subject,message,email)
     except Exception as e:
         print(e)

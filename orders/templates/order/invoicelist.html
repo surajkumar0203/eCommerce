@@ -1,0 +1,22 @@
+{% extends "utils/base.html" %}
+
+{% block start %}
+<div class="container mt-5 w-5">
+<table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Invoice Order Id</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td scope="row">
+                <u class="text-primary"><a href="{% url "download_invoice" %}?orderid={{order.order_id}}">{{order.order_id}}</a></u>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock start %}

@@ -2,8 +2,8 @@ from django.db import models
 from accounts.models import Customer,MyUser
 from products.models import VendorProducts
 from django.db.models import Sum,F
-from utils.utility import generate_order_id ,generate_slug
-
+from utils.utility import generate_order_id,generate_slug,generate_order_pdf
+from datetime import date
 
 
 class Carts(models.Model):
@@ -80,11 +80,50 @@ class Order(models.Model):
     final_price=models.FloatField()
 
     def __str__(self):
-        return self.order_id
+        return str(self.order_id)
     
     def save(self, *args, **kwargs):
         self.order_id=generate_order_id(Order.objects.count())
         super(Order,self).save(*args, **kwargs)
+        
+       
+        
+
+    def get_order_data(self):
+        
+        order_data={
+           'invoice':{
+                'invoice_number':self.order_orderItem.all().first().slug,
+                'date':date.today(),
+           },
+           
+           'customer':{
+                'Customer_name':self.customer.first_name+" "+self.customer.last_name,
+                'Customer_email':self.customer.email,
+            },
+            'shop_keeper':{
+                "seller_name":self.order_orderItem.all().first().product.shopkeeper.first_name+" "+self.order_orderItem.all().first().product.shopkeeper.last_name,
+                'sheller_email':self.order_orderItem.all().first().product.shopkeeper.email
+            },
+           
+            'order':{
+                'order_id':self.order_id,
+                'final_price':self.final_price,
+                'delivery_price':self.order_orderItem.all().first().product.delivery_price,
+                'tax':self.cart_item.tax()
+            },
+        
+           'order_items': [ 
+                {
+                    'product_name':order_item.product.product.item_name,
+                    'Quantity':order_item.quantity,
+                    'per_price':order_item.per_product_price,
+                    'total':order_item.total_price,
+                
+                } for order_item in self.order_orderItem.all()
+            ]
+        }
+        return order_data
 
 class OrderItem(models.Model):
     order_choice=(
@@ -101,5 +140,7 @@ class OrderItem(models.Model):
     total_price=models.FloatField()
     slug=models.SlugField(unique=True)
     status=models.CharField(max_length=150,choices=order_choice,default="Order Received")
-
-  
+    def __str__(self):
+        return str(self.order.order_id)
+    
+    

@@ -116,11 +116,11 @@ AUTH_USER_MODEL = "accounts.Customer"
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "Asia/Kolkata"
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -158,3 +158,14 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+
+# celery
+CELERY_TIMEZONE = "Asia/Kolkata"
+CELERY_BROKER_URL='redis://localhost:6379/0'
+CELERY_RESULT_BACKEND='redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT=['application/json']
+CELERY_TASK_SERIALIZER="json"
+CELERY_RESULT_SERIALIZER="json"
+CELERY_RESULT_EXTENDED = True
+CELERY_RESULT_EXPIRES= 60*60*24

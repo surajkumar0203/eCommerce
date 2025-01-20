@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .invoice-container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      margin-top:10px;
+      border: 1px solid #ddd;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .invoice-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .invoice-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .invoice-header p {
+      margin: 0;
+      font-size: 14px;
+      color: #555;
+    }
+    .details-container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .details-container .details {
+      width: 48%;
+      font-size: 14px;
+    }
+    .details-container .details h3 {
+      margin-bottom: 5px;
+      font-size: 16px;
+      text-decoration: underline;
+    }
+    .invoice-details table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    .invoice-details th, .invoice-details td {
+      text-align: left;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+    .invoice-summary {
+      text-align: right;
+    }
+    .invoice-summary table {
+      width: 100%;
+    }
+    .invoice-summary td {
+      padding: 3px;
+    }
+    .total {
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .details p{
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <div class="invoice-header">
+      <h1>Invoice</h1>
+      <p>Invoice {{order_item.invoice.invoice_number}}</p>
+      <p>Date: {{order_item.invoice.date}}</p>
+    </div>
+
+    <!-- Seller and Buyer Information -->
+    <div class="details-container">
+      <div class="details">
+        <h3>Seller Information</h3>
+        <p>Name: {{order_item.shop_keeper.seller_name}}</p>
+        <p>Email: {{order_item.shop_keeper.sheller_email}}</p>
+      </div>
+      <div class="details">
+        <h3>Buyer Information</h3>
+        <p>Name: {{order_item.customer.Customer_name}}</p>
+        <p>Email: {{order_item.customer.Customer_email}}</p>
+      </div>
+    </div>
+
+    <!-- Invoice Details -->
+    <div class="invoice-details">
+      <table>
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for oi in order_item.order_items %}
+            <tr>
+              <td>{{oi.product_name}}</td>
+              <td>{{oi.product_name}}</td>
+              <td>{{oi.Quantity}}</td>
+              <td>₹{{oi.per_price}}</td>
+              <td>₹{{oi.total}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Invoice Summary -->
+    <div class="invoice-summary">
+      <table>
+        <tr>
+          <td>Subtotal:</td>
+          <td>₹{{order_item.order.}}</td>
+        </tr>
+        <tr>
+          <td>Tax:</td>
+          <td>₹{{order_item.order.tax}}</td>
+        </tr>
+        {% if order_item.order.delivery_price %}
+          <tr>
+            <td>Delivery_price:</td>
+            <td>₹{{order_item.order.delivery_price}}</td>
+          </tr>
+        {% endif %}
+        <tr class="total">
+          <td>Total:</td>
+          <td>₹{{order_item.order.final_price}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

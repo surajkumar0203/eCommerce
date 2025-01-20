@@ -7,12 +7,13 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 @admin.register(Shopkeeper)
 class ShopkeeperAdmin(BaseUserAdmin):
-    list_display = ["id","username","first_name","last_name","email"]
+    list_display = ["id","username","first_name","last_name","email","vender_name"]
     list_filter = ["email"]
     
     fieldsets = [
         ("User Credentials", {"fields": ["username","email", "password"]}),
         ("Personal info", {"fields": ["first_name","last_name","email_token"]}),
+        ("Shop Info", {"fields": ["gst_number","aadhar_number","bmp_id","vender_name"]}),
         ("Permissions", {"fields": ["is_active","is_staff","is_email_verified"]}),
     ]
     
