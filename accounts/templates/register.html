@@ -2,28 +2,30 @@
 
 {% block start %}
     <div class="container mx-auto col-6 shadow-lg mt-5 p-5 mb-5 bg-white rounded">
+        <div id="register-form" style="display: block;">
+            <h3 class="mb-4">Customer Register</h3>
         <form  method="POST">
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">Username *</label>
-                <input type="text" class="form-control mb-3" id="username" name="username" placeholder="Username">
+                <input type="text" class="form-control mb-3" id="cus-username" name="username" placeholder="Username">
                 
             </div>
             <div class="form-group">
                 <label for="password">Password *</label>
-                <input type="password" class="form-control" name="password" id="password" placeholder="Password" placeholder="Password" autocomplete="new-password">
+                <input type="password" class="form-control" name="password" id="cus-reg-password" placeholder="Password" placeholder="Password" autocomplete="new-password">
             </div>
             <div class="form-group">
                 <label for="first-name">First Name *</label>
-                <input type="text" class="form-control" id="first-name" name="first_name" placeholder="First Name">
+                <input type="text" class="form-control" id="cus-reg-first-name" name="first_name" placeholder="First Name">
             </div>
             <div class="form-group">
                 <label for="last-name">Last Name *</label>
-                <input type="text" class="form-control" id="last-name" name="last_name" placeholder="Last Name">
+                <input type="text" class="form-control" id="cus-reg-last-name" name="last_name" placeholder="Last Name">
             </div>
             <div class="form-group">
                 <label for="email">Email ID *</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Email ID">
+                <input type="email" class="form-control" id="cus-reg-email" name="email" placeholder="Email ID">
             </div>
             <button type="submit" class="btn btn-primary mt-2">Submit</button>
         </form>
@@ -35,5 +37,73 @@
             </p>
         </div>
     </div>
+
+
+    <div id="login-form" style="display: none;">
+        <h3 class="mb-4">Shopkeeper Register</h3>
+        <form method="POST" action="{% url "shopkeeper_ragister" %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username *</label>
+                <input type="text" class="form-control mb-3" id="shop-reg-username" name="username" placeholder="Username">
+                
+            </div>
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <input type="password" class="form-control" name="password" id="shop-reg-password" placeholder="Password" placeholder="Password" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+                <label for="first-name">First Name *</label>
+                <input type="text" class="form-control" id="shop-reg-first-name" name="first_name" placeholder="First Name">
+            </div>
+            <div class="form-group">
+                <label for="last-name">Last Name *</label>
+                <input type="text" class="form-control" id="shop-reg-last-name" name="last_name" placeholder="Last Name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email ID *</label>
+                <input type="email" class="form-control" id="shop-reg-email" name="email" placeholder="Email ID">
+            </div>
+            <div class="form-group">
+                <label for="gstnumber">Gst number *</label>
+                <input type="text" class="form-control" id="shop-reg-gstnumber" name="gstnumber" placeholder="GST Number">
+            </div>
+            <div class="form-group">
+                <label for="aadharnumber">Aadhar number *</label>
+                <input type="text" class="form-control" id="shop-reg-aadharnumber" name="aadharnumber" placeholder="Aadhar Number">
+            </div>
+            <div class="form-group">
+                <label for="bmpid">BMP Id *</label>
+                <input type="text" class="form-control" id="shop-reg-bmpid" name="bmpid" placeholder="BMP Id">
+            </div>
+            <div class="form-group">
+                <label for="vendername">Vender name *</label>
+                <input type="text" class="form-control" id="shop-reg-vendername" name="vendername" placeholder="Vender name">
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Submit</button>
+        </form>
+    </div>
+        <button class="btn btn-link mt-3" id="togglebtn" onclick="toggleForms()">Register as a Shopkeeper</button>
+    </div>
     {% include "utils/login_model.html" %}
+    
+    <script>
+        function toggleForms() {
+            const registerForm = document.getElementById('register-form');
+            const loginForm = document.getElementById('login-form');
+            const toggleBtn = document.getElementById('togglebtn');
+            if (registerForm.style.display === 'none') {
+                registerForm.style.display = 'block';
+                loginForm.style.display = 'none';
+                toggleBtn.innerText="Register as a Shopkeeper"
+            } else {
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                toggleBtn.innerText="Register as a Customer"
+            }
+        }
+    
+        
+    </script>
 {% endblock start %}
+

@@ -1,41 +1,55 @@
 from django.shortcuts import render,redirect
-# from django.contrib.auth.models import User
-from accounts.models import MyUser as User,Customer
+
+from accounts.models import MyUser as User,Customer,Shopkeeper
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from accounts.utility import create_user_account,login_user_account
 
+# ragister as a custom
 def register(request):
     if request.method=="POST":
-        first_name=request.POST.get('first_name')
-        last_name=request.POST.get('last_name')
-        username=request.POST.get('username')
-        email=request.POST.get('email')
-        password=request.POST.get('password')
+        data={
+            'first_name':request.POST.get('first_name'),
+            'last_name':request.POST.get('last_name'),
+            'username':request.POST.get('username'),
+            'email':request.POST.get('email'),
+            'password':request.POST.get('password'),
+        }
+        response=create_user_account(Customer,**data)
+        if "error" in response:
+            messages.error(request, response["error"])
+            return redirect('/accounts/register/')
+        messages.success(request, response["success"])
+        return redirect('/')
+    
+    return render(request, 'register.html')
 
-        user_obj=Customer.objects.filter(Q(username=username) | Q(email=email))
 
-        if user_obj.exists():
-            messages.error(request,"User Already Exists")
-            return redirect('/')
-        try:
-            user_obj=Customer.objects.create(
-                username=username,
-                first_name=first_name,
-                last_name=last_name,
-                email=email
-            )
-            user_obj.set_password(password)
-            user_obj.save()
-            messages.success(request,"Check Your Email To Activate Your Account")
-            return redirect('/')
-        
-        except ValueError as e:
-            messages.error(request, str(e)) 
+# ragister as a shopkeeper
+
+def shopkeeper_register(request):
+    if request.method=="POST":
+        data={
+            'first_name':request.POST.get('first_name'),
+            'last_name':request.POST.get('last_name'),
+            'username':request.POST.get('username'),
+            'email':request.POST.get('email'),
+            'password':request.POST.get('password'),
+            'gst_number':request.POST.get('gstnumber'),
+            'aadhar_number':request.POST.get('aadharnumber'),
+            'vender_name':request.POST.get('vendername'),
+            'bmp_id':request.POST.get('bmpid'),
+        }
+        response=create_user_account(Shopkeeper,**data)
+
+        if 'error' in response:
+            messages.error(request,response['error'])
             return redirect('/accounts/register/')
         
-   
+        messages.success(request, response["success"])
+        return redirect('/')
+        
     return render(request, 'register.html')
 
 
@@ -60,8 +74,31 @@ def login_page(request):
             return redirect('/')
         messages.error(request,"Invalid Credentials")
         return redirect('/')
+        
     
     return redirect('/')
+
+
+def shopkeeper_login(request):
+    if request.method=='POST':
+       
+        username=request.POST.get('username')
+        password=request.POST.get('password')
+        bmpid=request.POST.get('bmpid')
+        
+        try:
+            shopkeeper = Shopkeeper.objects.get(username=username,bmp_id=bmpid)
+            if shopkeeper.check_password(password):
+                login(request, shopkeeper)
+                messages.success(request,"Login Successfully")
+                return redirect('/products/upload/')
+            messages.success(request,"Invalid Credentials")
+            return redirect('/')
+
+        except Exception as e: 
+            messages.success(request,"Invalid BMP ID")
+    return redirect('/')
+
 
 @login_required(login_url='/')
 def logout_page(request):

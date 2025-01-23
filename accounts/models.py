@@ -82,4 +82,3 @@ class Shopkeeper(MyUser):
     bmp_id = models.CharField(unique=True, max_length=100)
     vender_name = models.CharField(max_length=100)
     
-

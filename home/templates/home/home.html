@@ -2,47 +2,9 @@
 {% load static %}
 
 {% block start %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <ul class="list-group mt-5" id="list-ul">
-                    <li class="list-group-item">Best Clothes</li>
-                    <li class="list-group-item">Automobiles</li>
-                    <li class="list-group-item">Home interior</li>
-                    <li class="list-group-item">Electronics</li>
-                    <li class="list-group-item">Technologies</li>
-                    <li class="list-group-item dropdown dropright">
-                        <a class="dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Submenu name</a>
-                            <a class="dropdown-item" href="#">Greatmenu name</a>
-                            <a class="dropdown-item" href="#">Another menu</a>
-                            <a class="dropdown-item" href="#">Same others</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-md-9">
-                <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner mt-5" id="car">
-                        <div class="carousel-item active">
-                            <img class="d-block w-100" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYKdc4-EM4JhSkmgKMC4nIuGKv_dexn7KyXw&usqp=CAU" alt="First slide">
-                        </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100" src="https://cdn.shopify.com/s/files/1/0074/0429/0111/files/Homepage-free-shipping-banner_1350x600.jpg?v=1591817221" alt="Second slide">
-                        </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100" src="https://i.pinimg.com/originals/df/c1/f9/dfc1f9ba2734aa94690f009d721440d7.jpg" alt="Third slide">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="products">
         <div class="container">
-            <button class="btn btn-sm btn-outline-primary float-right mt-5 but">See all</button>
+           
             <h1 class="pt-5 pb-5">Popular Products</h1>
 
             <div class="row">
@@ -74,5 +36,6 @@
 
     <!-- Modal -->
     {% include "utils/login_model.html" %}
-
+    
+    
 {% endblock start %}

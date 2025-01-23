@@ -1,25 +1,71 @@
+
+
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h5 class="modal-title text-light" id="exampleModalLabel">Sign In</h5>
+                <h5 class="modal-title text-light" id="exampleModalLabel">Customer Sign In</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div id="customer-login" style="display: block;">
+              
+            <div class="modal-body" >
                 <form method="POST" action="{% url 'login_page' %}">
                     {% csrf_token %}
                     <div class="form-group">
-                        <input type="text" class="form-control mb-3" name="username" id="username" aria-describedby="emailHelp" placeholder="Username">
-                        <input type="password" class="form-control" name="password" id="password" placeholder="Password" autocomplete="new-password">
+                        <input type="text" class="form-control mb-3" name="username" id="cus-log-username" aria-describedby="emailHelp" placeholder="Username">
+                        <input type="password" class="form-control" name="password" id="cus-log-password" placeholder="Password" autocomplete="new-password">
                     </div>
                     <button type="submit" class="btn btn-primary mt-2">Submit</button>
                 </form>
             </div>
+            
+        </div>
+        <div id="shopkeeper-login" style="display: none;">
+            <div class="modal-body">
+                <form method="POST" action="{% url 'shopkeeper_login' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" class="form-control mb-3" name="username" id="shop-log-username" aria-describedby="emailHelp" placeholder="Username">
+                        <input type="password" class="form-control mb-3" name="password" id="shop-log-password" placeholder="Password" autocomplete="new-password">
+                        <input type="text" class="form-control" id="shop-log-bmpid" name="bmpid" placeholder="BMP Id">
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-2">Submit</button>
+                </form>
+                
+            </div>
+        </div>
+        <button class="btn btn-link mt-3" id="togglebtn" onclick="toggleButton()">Login as a Shopkeeper</button>
             <div class="signup">
                 <p class="float-right text-muted px-4">If not registered, <a href="{% url "register" %}" class="text-muted">register now!</a></p>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+
+    function toggleButton() {
+        const customerLogin = document.getElementById('customer-login');
+        const shopkeeperLogin = document.getElementById('shopkeeper-login');
+        const toggleBtn = document.getElementById('togglebtn');
+        const headerTag = document.getElementById('exampleModalLabel');
+        if (customerLogin.style.display === 'none') {
+            customerLogin.style.display = 'block';
+            shopkeeperLogin.style.display = 'none';
+            toggleBtn.innerText="Login as a Shopkeeper"
+            headerTag.innerText = "Customer Sign In"
+        } else {
+            customerLogin.style.display = 'none';
+            shopkeeperLogin.style.display = 'block';
+            toggleBtn.innerText="Login as a Customer"
+            headerTag.innerText = "Shopkeeper Sign In"
+        }
+       
+    }
+   
+
+</script>
+

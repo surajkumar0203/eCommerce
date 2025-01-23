@@ -229,8 +229,8 @@ def generate_order_pdf(instance):
     except Exception as e:
         print(f"PDF generation failed: {e}")
 
-order=Order.objects.first()
+# order=Order.objects.first()
 # print(order.get_order_data())
 # print(order.order_orderItem.all().first().product.delivery_price)
 # print(order.order_orderItem.slug)
-generate_order_pdf(order)
+# generate_order_pdf(order)
