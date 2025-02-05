@@ -37,42 +37,53 @@
           </tbody>
         </table>
         <hr>
-        <div class="row pt-3">
-          <div class="col-md-3">
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
+  
+        
+        {% if request.user.is_authenticated %}
+          {% if request.user.is_shopkeeper %}
+            <h1>You are not a customer</h1>
+            {% else %}
+              <div class="row pt-3">
+                <div class="col-md-3">
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                    
+                      <a href="{% url "add_to_cart" %}?product_id={{ product.product_id }}" class="input-group-text">
+                        Add To Cart
+                      </a>
+                    </div>
               
-                <a href="{% url "add_to_cart" %}?product_id={{ product.product_id }}" class="input-group-text">
-                  Add To Cart
-                </a>
-              </div>
-        
-              {% if cart_quantity %}
-              <div class="input-group-append">
-                <a href="{% url "remove_to_cart" %}?product_id={{ product.product_id }}" class="input-group-text">
-                  Remove from Cart
-                </a>
-              </div>
-              {% endif %}
-            </div>
-          </div>
-    
+                    {% if cart_quantity %}
+                    <div class="input-group-append">
+                      <a href="{% url "remove_to_cart" %}?product_id={{ product.product_id }}" class="input-group-text">
+                        Remove from Cart
+                      </a>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+          
 
-        </div>
-        
-        {% if product_variants_result %}
-        <h5>Select Product Variant</h5>
-        {% for key,value in product_variants_result.items %}
-          <label class="form-check form-check-inline">
-            
-            <input class="form-check-input" type="checkbox" name="select_variants_result" id="scroll-{{key}}" value="{{key}}"
-              onClick=urlUpdates("{{key}}")>
-            {{value.0}}
-         
-          </label>
-        {% endfor %}
+              </div>
+              
+              {% if product_variants_result %}
+                <h5>Select Product Variant</h5>
+                {% for key,value in product_variants_result.items %}
+                  <label class="form-check form-check-inline">
+                    
+                    <input class="form-check-input" type="checkbox" name="select_variants_result" id="scroll-{{key}}" value="{{key}}"
+                      onClick=urlUpdates("{{key}}")>
+                    {{value.0}}
+                
+                  </label>
+                {% endfor %}
+              {% endif %}
+              </div>
+            {% endif %}
+        {% else %}
+          <h1>Please login to buy</h1>
         {% endif %}
-      </div>
+      
     </div>
   </div>
   

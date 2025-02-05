@@ -20,7 +20,8 @@ class MyUser(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_email_verified = models.BooleanField(default=False)
     email_token = models.CharField(max_length=100,blank=True,null=True)
-
+    isShopkeeper=models.BooleanField(default=False)
+    
     objects = MyUserManager()
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["first_name","last_name","email"]
@@ -38,14 +39,16 @@ class MyUser(AbstractBaseUser):
             raise ValueError("All fields are required")
         super(MyUser,self).save(*args,**kwargs)
 
+    def is_shopkeeper(self):
+        return self.isShopkeeper
     class Meta:
-        abstract = True
+        db_table = "myuser"
 
 
 class Customer(MyUser):
     profile_image= models.ImageField(upload_to="customer/",null=True, blank=True)
     
-    
+    @property
     def getCartItemCount(self):
         from orders.models import CartItem,Carts
         '''
@@ -82,3 +85,5 @@ class Shopkeeper(MyUser):
     bmp_id = models.CharField(unique=True, max_length=100)
     vender_name = models.CharField(max_length=100)
     
+    
+  

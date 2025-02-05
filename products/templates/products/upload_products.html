@@ -1,1 +1,188 @@
-1
+{% extends "utils/base.html" %}
+
+
+{% block start %}
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+<div class="container mx-auto col-6 shadow-lg mt-5 p-5 mb-5 bg-white rounded">
+    <h2>Multi-Step Form</h2>
+    <form id="multiStepForm" method="POST" action="{% url "upload_product" %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Step 1 -->
+        <div class="step" id="step1">
+            <div class="mb-3">
+                <label for="brand_name" class="form-label">Brand Name</label>
+                <input type="text" class="form-control" id="brand_name" name="brand_name" required>
+            </div>
+            <div class="mb-3">
+                <label for="category_name" class="form-label">Category Name</label>
+                <input type="text" class="form-control" id="category_name" name="category_name" required>
+            </div>
+            <div class="mb-3">
+                <label for="commission_percentage" class="form-label">Commission Percentage</label>
+                <input type="number" class="form-control" min=10 max=50 id="comission_percentage" name="comission_percentage">
+            </div>
+            <div class="mb-3">
+                <label for="upload_image" class="form-label">Product Image</label>
+                <input type="file" class="" id="upload_image" name="upload_image" required>
+                <small id="error_message" style="color: red; display: none;">Image size must be less than 5MB.</small>
+            </div>
+            <div class="mb-3">
+                <label for="item_name" class="form-label">Item Name</label>
+                <input type="text" class="form-control" id="item_name" name="item_name" required>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step hidden" id="step2">
+            <div class="mb-3">
+                <label for="product_description" class="form-label">product_description</label>
+                <textarea class="form-control" style="resize: none; height: 150px;" id="product_description" name="product_description"></textarea>
+                
+            </div>
+    
+            <div class="mb-3">
+                <label for="parent_product" class="form-label">Parent product</label>
+                <select class="form-control" id="parent_product" name="parent_product">
+                    <option value="--select--">--select--</option>
+                    {% for parent_product in parent_products %}
+                        <option value="{{parent_product}}">{{parent_product}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="maximum_retail_price" class="form-label">Maximum Retail Price</label>
+                <input type="text" class="form-control" id="maximum_retail_price" name="maximum_retail_price" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="variant_name" class="form-label">Variant name</label>
+                <input type="text" class="form-control" id="variant_name" name="variant_name" required>
+            </div>
+            <div class="mb-3">
+                <label for="option_name" class="form-label">Option name</label>
+                <input type="text" class="form-control" id="option_name" name="option_name" required>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="previousStep()">Back</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
+        </div>
+        <!-- Step 3 -->
+        <div class="step hidden" id="step3">
+            <div class="mb-3">
+                <label for="vendor_selling_price" class="form-label">Vendor selling price</label>
+                <input type="text" class="form-control" id="vendor_selling_price" name="vendor_selling_price" required>
+                
+            </div>
+    
+            <div class="mb-3">
+                <label for="dealer_price" class="form-label">Dealer price</label>
+                <input type="text" class="form-control" id="dealer_price" name="dealer_price" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="delivery_price" class="form-label">Delivery price</label>
+                <input type="text" class="form-control" id="delivery_price" name="delivery_price">
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="previousStep()">Back</button>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    let currentStep = 1;
+
+    // Disable the Next button initially
+    document.addEventListener('DOMContentLoaded', function () {
+        toggleNextButton();
+    });
+
+    function nextStep() {
+        // Validate the current step fields
+        if (!validateStep(currentStep)) return;
+
+        // Hide current step
+        document.getElementById(`step${currentStep}`).classList.add('hidden');
+        // Show next step
+        currentStep++;
+        document.getElementById(`step${currentStep}`).classList.remove('hidden');
+        toggleNextButton(); // Update button state for the new step
+    }
+
+    function previousStep() {
+        // Hide current step
+        document.getElementById(`step${currentStep}`).classList.add('hidden');
+        // Show previous step
+        currentStep--;
+        document.getElementById(`step${currentStep}`).classList.remove('hidden');
+        toggleNextButton(); // Update button state for the previous step
+    }
+
+    function validateStep(step) {
+        const stepElement = document.getElementById(`step${step}`);
+        const inputs = stepElement.querySelectorAll('input, textarea, select');
+        let isValid = true;
+
+        inputs.forEach(input => {
+            if (input.hasAttribute('required') && !input.value.trim()) {
+                input.classList.add('border', 'border-danger');
+                isValid = false;
+            } else {
+                input.classList.remove('border', 'border-danger');
+            }
+        });
+
+        return isValid;
+    }
+
+    function toggleNextButton() {
+        const nextButton = document.querySelector('#step1 .btn-primary');
+        const inputs = document.querySelectorAll('#step1 input[required]');
+        let allFilled = true;
+
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                allFilled = false;
+            }
+        });
+
+        // Enable or disable the Next button based on field completion
+        nextButton.disabled = !allFilled;
+    }
+
+    // Real-time validation for Step 1 inputs
+    document.querySelectorAll('#step1 input[required]').forEach(input => {
+        input.addEventListener('input', toggleNextButton);
+    });
+
+    
+    // check image size 
+        document.getElementById('upload_image').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const maxSizeInMB = 5; // Maximum file size in MB
+            const errorMessage = document.getElementById('error_message');
+            
+            // check file type
+            if(!((file && file.type.split("/")[1] ==="jpeg") || (file && file.type.split("/")[1] ==="jpg"))){
+                errorMessage.innerText="Only jpg or jpeg allow"
+                errorMessage.style.display = 'inline';
+            }
+
+            // Check if file exists and validate size
+            else if (file && file.size > maxSizeInMB * 1024 * 1024) {
+                errorMessage.style.display = 'inline';
+                this.value = ''; // Clear the file input
+            } else {
+                errorMessage.style.display = 'none';
+            }
+        });
+</script>
+{% include "utils/login_model.html" %}
+
+
+{% endblock start %}

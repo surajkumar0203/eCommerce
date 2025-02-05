@@ -10,6 +10,9 @@ from orders.payments import RazorPayPayment
 import json
 from orders.tasks import send_Email
 from utils.utility import generate_order_pdf
+from utils.utility import is_shopkeeper
+
+
 
 @login_required(login_url='/accounts/login/')
 def add_to_cart(request):
@@ -67,8 +70,8 @@ def remove_to_cart(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-
 @login_required(login_url='/accounts/login/')
+@is_shopkeeper("customer")
 def get_cart(request):
     try:
         current_customer = request.user
@@ -175,11 +178,12 @@ def invoice(request):
 def downloadPdf(request):
     try:
         order_id=request.GET.get('orderid')
-
         orders=Order.objects.filter(customer=request.user,order_id=order_id)
+        
         if orders.exists():
             generate_order_pdf(orders.first())
             res=send_Email.delay(order_id,request.user.email)
+            print("res : ",res)
         else:
             return redirect('/orders/invoice/')
             

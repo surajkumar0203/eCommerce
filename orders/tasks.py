@@ -6,6 +6,7 @@ from orders.models import Order
 @shared_task
 def send_Email(order_id, sender_email):
     instance=Order.objects.filter(order_id=order_id)
+    print("suraj",instance)
     # Send PDF to email
     send_pdf_to_email(sender_email,instance.first())
     

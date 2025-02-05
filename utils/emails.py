@@ -16,7 +16,6 @@ def send_account_activation_email(subject,message,email):
 from django.core.mail import EmailMessage
 
 def send_email_with_attachment(subject, message, recipient_list, attachment_path):
-    
     from_email=settings.EMAIL_HOST_USER
     # Read the file content in binary mode
     with open(attachment_path, 'rb') as file:

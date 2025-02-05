@@ -14,7 +14,7 @@ class ShopkeeperAdmin(BaseUserAdmin):
         ("User Credentials", {"fields": ["username","email", "password"]}),
         ("Personal info", {"fields": ["first_name","last_name","email_token"]}),
         ("Shop Info", {"fields": ["gst_number","aadhar_number","bmp_id","vender_name"]}),
-        ("Permissions", {"fields": ["is_active","is_staff","is_email_verified"]}),
+        ("Permissions", {"fields": ["is_active","is_staff","is_email_verified","isShopkeeper"]}),
     ]
     
     add_fieldsets = [
@@ -45,7 +45,7 @@ class ShopkeeperAdmin(BaseUserAdmin):
             "Permissions",
             {
                 "classes": ["wide"],
-                "fields": ["is_active","is_email_verified","is_staff"],
+                "fields": ["is_active","is_email_verified","is_staff","isShopkeeper"],
             },
         )
     ]
@@ -65,7 +65,7 @@ class CustomerAdmin(BaseUserAdmin):
     fieldsets = [
         ("User Credentials", {"fields": ["username","email", "password"]}),
         ("Personal info", {"fields": ["first_name","last_name","email_token"]}),
-        ("Permissions", {"fields": ["is_active","is_staff","is_email_verified"]}),
+        ("Permissions", {"fields": ["is_active","is_staff","is_email_verified","isShopkeeper"]}),
     ]
     
     add_fieldsets = [
@@ -89,7 +89,7 @@ class CustomerAdmin(BaseUserAdmin):
             "Permissions",
             {
                 "classes": ["wide"],
-                "fields": ["is_active","is_email_verified","is_staff"],
+                "fields": ["is_active","is_email_verified","is_staff","isShopkeeper"],
             },
         )
     ]

@@ -4,6 +4,8 @@ import pdfkit
 from django.template.loader import get_template
 from django.conf import settings
 from utils.emails import send_email_with_attachment
+from django.shortcuts import redirect
+
 
 def generate_order_id(item_count):
     now= datetime.now()
@@ -20,6 +22,13 @@ def generate_slug(order_id):
     unique=str(uuid4()).split("-")[0]
     return "".join([order_id[1],order_id[2],unique])
     
+
+# generate code
+def generate_code(value=None):
+    random_value=str(uuid4()).split("-")[0]
+    if value:
+        return "".join([value,random_value])
+    return "".join(["HSN-",random_value.upper()])
 
 def generate_order_pdf(instance):
     templates_name = 'order/invoice'
@@ -45,7 +54,7 @@ def generate_order_pdf(instance):
     output_path = f"{settings.BASE_DIR}/public/static/pdfs/{instance.order_id}.pdf"
     
     config=pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
-    
+  
     pdfkit.from_string(content,output_path,options=options,configuration=config)
 
 
@@ -60,11 +69,26 @@ def send_pdf_to_email(sender_email,instance):
 
     
     attachment_path = f"{settings.BASE_DIR}/public/static/pdfs/{instance.order_id}.pdf"  
-    print(attachment_path)
-
+ 
+   
     send_email_with_attachment(subject, message, recipient_list, attachment_path)
 
-    # from_email = settings.DEFAULT_FROM_EMAIL
-    # subject = f"Order {instance.order_id} Invoice"
-    # message = f"Please find the attached invoice for your order."
-    # attachment_path = f"{settings.BASE_DIR}/public/static/pdfs/{instance.order_id}.pdf"
+    
+
+
+
+
+
+
+def is_shopkeeper(required_role='shopkeeper'):
+    def inner_wrapper(view_func):
+        def wrapper(request,*args,**kwargs):
+            if not request.user.is_authenticated:
+                return redirect("/")  
+            if required_role == "shopkeeper" and not request.user.isShopkeeper:
+                return redirect("/")  
+            if required_role == "customer" and request.user.isShopkeeper:
+                return redirect("/")
+            return view_func(request, *args, **kwargs)  
+        return wrapper
+    return inner_wrapper

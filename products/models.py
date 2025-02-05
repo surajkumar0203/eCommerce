@@ -24,7 +24,7 @@ class BrandName(BaseModel):
 
 class Products(BaseModel):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="product_category")
-    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="product_sub_category")
+    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="product_sub_category",null=True,blank=True)
     brand = models.ForeignKey(BrandName, on_delete=models.CASCADE, related_name="product_brand")
     item_name = models.CharField(max_length=1000)
     product_description = models.TextField()

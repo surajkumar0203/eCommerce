@@ -1,0 +1,27 @@
+{% extends "utils/base.html" %}
+{% load hide_number %}
+{% block start %}
+<div class="container mt-5">
+    <div class="card mx-auto shadow-lg p-3 bg-white rounded" style="max-width: 400px;">
+        <p>Personal Info</p>
+        <div class="card-body text-center">
+            <img src="https://th.bing.com/th/id/OIP.TctatNGs7RN-Dfc3NZf91AAAAA?w=300&h=300&rs=1&pid=ImgDetMain" class="rounded-circle mb-3" width="70" alt="Profile Picture">
+            <h4 class="card-title" id="username">{{username}}</h4>
+            <p class="card-text"><strong>First Name:</strong> <span id="firstName">{{first_name}}</span></p>
+            <p class="card-text"><strong>Last Name:</strong> <span id="lastName">{{last_name}}</span></p>
+            <p class="card-text"><strong>Email:</strong> <span id="email">{{email}}</span></p>
+        </div>
+        {% if request.user.is_shopkeeper %}
+            <hr>
+            <p class="card-text"><strong>Gst number:</strong> <span id="gst_number">{{gst_number}}</span></p>
+            <p class="card-text" title="{{aadhar_number}}"><strong>Aadhar number:</strong> <span id="aadhar_number">{{aadhar_number | aadhar_hide}}</span></p>
+            <p class="card-text"><strong>Bmp id:</strong> <span id="bmp_id">{{bmp_id}}</span></p>
+            <p class="card-text"><strong>Vender name:</strong> <span id="vender_name">{{vender_name}}</span></p>
+        {% endif %}
+    </div>
+    
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock start %}

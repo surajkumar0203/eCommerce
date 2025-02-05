@@ -4,7 +4,7 @@ from django.db.models import Q
 from orders.models import *
 from accounts.models import Customer
 from django.contrib.postgres.search import SearchVector,SearchQuery,SearchRank,TrigramSimilarity
-
+from utils.utility import is_shopkeeper
 
 def home(request):
     categories = Category.objects.all()
@@ -56,7 +56,7 @@ def home(request):
             product__parent_product__isnull=True,
             product__product_images__isnull=False
         )
-    
+    print(products)
     context = {
         "products" : products,
         "search":search
@@ -64,9 +64,9 @@ def home(request):
     return render(request, 'home/home.html',context)
 
 
-def product_details(request,product_id):
+def product_details(request,product_sku):
     
-    vendor_product=VendorProducts.objects.get(product__id=product_id)
+    vendor_product=VendorProducts.objects.get(product__product_sku=product_sku)
     
     if request.GET.get('product_sku'):
         vendor_product=VendorProducts.objects.get(product__product_sku=request.GET.get('product_sku'))

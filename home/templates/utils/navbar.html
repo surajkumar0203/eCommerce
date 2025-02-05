@@ -25,37 +25,58 @@
             </div>
         </form>
         </div>
-
+        
         <!-- User & Cart Section -->
-        {% if request.user.is_authenticated %}
-            <div class="col-md-3 mt-3 dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Manage
-                </button>
-                <ul class="dropdown-menu dropdown-menu-dark">
-                    <li><a class="dropdown-item " href="{% url "myorder" %}">My Order</a></li>
-                    <li><a class="dropdown-item " href="{% url "invoice" %}">Invoice</a></li>
-                    <li><a class="dropdown-item" href="#">Account</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{% url "logout_page" %}">Logout</a></li>
-                </ul>
-                
-                <a href="{% url "get_cart" %}">
-                    <div class="circle float-right mouse-pointer">
-                        <i class="fas fa-shopping-cart text-muted"></i>
-                        <span class="badge badge-danger">{{request.user.getCartItemCount}}</span>
+        
+                {% if request.user.is_authenticated %}
                     
-                    </div>
-                </a>
-            </div>
-        {% else %}
-            <div class="col-md-3 mt-3 ">
-            
-                <div class="circle float-right mr-4 mouse-pointer" data-target="#exampleModal" data-toggle="modal">
-                    <i class="fas fa-user text-muted" ></i>
+                            <div class="col-md-3 mt-3 dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Manage
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-dark">
+                                    {% if request.user.isShopkeeper  %}
+                                        <li><a class="dropdown-item" href="{% url 'account_user_profile' %}">Account</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="{% url "logout_page" %}">Logout</a></li>
+                                        
+                                    {% else %}
+                                        <li><a class="dropdown-item " href="{% url "myorder" %}">My Order</a></li>
+                                        <li><a class="dropdown-item " href="{% url "invoice" %}">Invoice</a></li>
+                                    
+                                        <li><a class="dropdown-item" href="{% url 'account_user_profile' %}">Account</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="{% url "logout_page" %}">Logout</a></li>
+                                    
+                                       
+                                    {% endif %}
+                                </ul>
+                              
+                                {% if request.user.isShopkeeper == False %}
+                                <a href="{% url "get_cart" %}">
+                                    <div class="circle float-right mouse-pointer">
+                                        <i class="fas fa-shopping-cart text-muted"></i>
+                                        <span class="badge badge-danger">{{request.user.customer.getCartItemCount}}</span>
+                                      
+                                    </div>
+                                </a>
+                                
+                                    
+                                {% endif %}
+                            </div>
                 
+
+                {% else %}
+                <div class="col-md-3 mt-3 ">
+                    <div class="circle float-right mr-4 mouse-pointer" data-target="#exampleModal" data-toggle="modal">
+                        <i class="fas fa-user text-muted" ></i>
+
+                    </div>
                 </div>
-            </div>
-        {% endif %}
+            {% endif %}
+        
+       
+        
+        
     </div>
 </div>

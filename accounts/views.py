@@ -41,14 +41,17 @@ def shopkeeper_register(request):
             'vender_name':request.POST.get('vendername'),
             'bmp_id':request.POST.get('bmpid'),
         }
-        response=create_user_account(Shopkeeper,**data)
+        try:
+            response=create_user_account(Shopkeeper,**data)
 
-        if 'error' in response:
-            messages.error(request,response['error'])
-            return redirect('/accounts/register/')
-        
-        messages.success(request, response["success"])
-        return redirect('/')
+            if 'error' in response:
+                messages.error(request,response['error'])
+                return redirect('/accounts/register/')
+            
+            messages.success(request, response["success"])
+        except:
+            messages.success(request, 'User already exists')
+            return redirect('/')
         
     return render(request, 'register.html')
 
@@ -85,18 +88,22 @@ def shopkeeper_login(request):
         username=request.POST.get('username')
         password=request.POST.get('password')
         bmpid=request.POST.get('bmpid')
-        
         try:
             shopkeeper = Shopkeeper.objects.get(username=username,bmp_id=bmpid)
-            if shopkeeper.check_password(password):
-                login(request, shopkeeper)
+            if not shopkeeper.is_email_verified:
+                messages.error(request,"Email Not Verified")
+                return redirect('/')
+            shopkeeper_obj=authenticate(username=username,password=password)
+            if shopkeeper_obj is not None:
+                login(request, shopkeeper_obj)
                 messages.success(request,"Login Successfully")
                 return redirect('/products/upload/')
             messages.success(request,"Invalid Credentials")
             return redirect('/')
 
         except Exception as e: 
-            messages.success(request,"Invalid BMP ID")
+            messages.success(request,"Invalid Credentials")
+            return redirect('/')
     return redirect('/')
 
 
@@ -121,3 +128,26 @@ def account_activate(request,token_id):
         return redirect('/')
     
     return redirect('/')
+
+
+
+# user profile
+@login_required(login_url='/')
+def account_user_profile(request):
+    myuser=User.objects.get(username=request.user)
+    context={}
+   
+    
+    context['username']=myuser.username
+    context['first_name']=myuser.first_name
+    context['last_name']=myuser.last_name
+    context['email']=myuser.email
+    
+    if myuser.isShopkeeper:
+        shopkeeper=Shopkeeper.objects.get(username=request.user)
+        context['gst_number']=shopkeeper.gst_number
+        context['aadhar_number']=shopkeeper.aadhar_number
+        context['bmp_id']=shopkeeper.bmp_id
+        context['vender_name']=shopkeeper.vender_name
+
+    return render(request,'userprofile.html',context)
