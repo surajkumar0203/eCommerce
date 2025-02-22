@@ -20,7 +20,7 @@ def add_to_cart(request):
         current_customer = request.user
        
         my_user=Customer.objects.get(username=current_customer)
-        
+        print(my_user)
         product_id = request.GET.get('product_id')
     
         vendor_products = VendorProducts.objects.get(product=product_id)
@@ -182,8 +182,7 @@ def downloadPdf(request):
         
         if orders.exists():
             generate_order_pdf(orders.first())
-            res=send_Email.delay(order_id,request.user.email)
-            print("res : ",res)
+            send_Email.delay(order_id,request.user.email)
         else:
             return redirect('/orders/invoice/')
             

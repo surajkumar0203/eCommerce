@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from accounts.utility import create_user_account,login_user_account
+from products.models import VendorProducts
 
 # ragister as a custom
 def register(request):
@@ -43,7 +44,7 @@ def shopkeeper_register(request):
         }
         try:
             response=create_user_account(Shopkeeper,**data)
-
+            
             if 'error' in response:
                 messages.error(request,response['error'])
                 return redirect('/accounts/register/')
@@ -60,7 +61,6 @@ def login_page(request):
     if request.method=='POST':
         username=request.POST.get('username')
         password=request.POST.get('password')
-        
         user_obj=Customer.objects.filter(username=username).exists()
         if not user_obj:
             messages.error(request,"User Not Found")
@@ -115,12 +115,13 @@ def logout_page(request):
 
 def account_activate(request,token_id): 
     try:
-        user_obj=Customer.objects.get(email_token=token_id)
+        user_obj=User.objects.get(email_token=token_id)
         if user_obj.is_email_verified:
             messages.success(request,"Your Account is Already Activated")
             return redirect('/')
         
         user_obj.is_email_verified=True
+        
         user_obj.save()
         messages.success(request,"Your Account is Activated")
     except Exception as e:
@@ -145,9 +146,11 @@ def account_user_profile(request):
     
     if myuser.isShopkeeper:
         shopkeeper=Shopkeeper.objects.get(username=request.user)
+        vender_products=VendorProducts.objects.filter(shopkeeper=shopkeeper)
         context['gst_number']=shopkeeper.gst_number
         context['aadhar_number']=shopkeeper.aadhar_number
         context['bmp_id']=shopkeeper.bmp_id
         context['vender_name']=shopkeeper.vender_name
-
+        context['vender_products']=vender_products
+        # print(vender_products.product.product.objects.all())
     return render(request,'userprofile.html',context)

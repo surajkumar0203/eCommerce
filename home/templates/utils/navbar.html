@@ -4,7 +4,7 @@
     <div class="row">
         <!-- Logo Section -->
         <div class="col-md-2 mt-2">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/">
              
                 <img src="{% static 'images/logo.png' %}" 
                     alt="{% static 'images/logo.png' %}" class="img-fluid">
@@ -37,6 +37,7 @@
                                 <ul class="dropdown-menu dropdown-menu-dark">
                                     {% if request.user.isShopkeeper  %}
                                         <li><a class="dropdown-item" href="{% url 'account_user_profile' %}">Account</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'upload_product' %}">Upload Product</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item" href="{% url "logout_page" %}">Logout</a></li>
                                         
@@ -69,14 +70,9 @@
                 {% else %}
                 <div class="col-md-3 mt-3 ">
                     <div class="circle float-right mr-4 mouse-pointer" data-target="#exampleModal" data-toggle="modal">
-                        <i class="fas fa-user text-muted" ></i>
-
+                        <i class="fas fa-user text-muted"></i>
                     </div>
                 </div>
             {% endif %}
-        
-       
-        
-        
-    </div>
+        </div>
 </div>

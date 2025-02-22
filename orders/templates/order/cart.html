@@ -67,7 +67,7 @@
             </div>
         </div>
 
-        
+        {% include "utils/footer.html" %}
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
         <script>
         var options = {
@@ -111,5 +111,5 @@
     </div>
     
 </section>
-{% include "utils/footer.html" %}
+{% comment %} {% include "utils/footer.html" %} {% endcomment %}
 {% endblock start %}

@@ -18,6 +18,8 @@ def create_user_account(model, **data):
     try:
         user_obj=model.objects.create(**data)
         user_obj.set_password(data['password'])
+        if model==Shopkeeper:
+            user_obj.isShopkeeper=True
         user_obj.save()
         return {"success": "Check your email to activate your account"}
     except ValueError as e:

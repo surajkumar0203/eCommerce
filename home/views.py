@@ -56,7 +56,7 @@ def home(request):
             product__parent_product__isnull=True,
             product__product_images__isnull=False
         )
-    print(products)
+ 
     context = {
         "products" : products,
         "search":search
@@ -65,7 +65,7 @@ def home(request):
 
 
 def product_details(request,product_sku):
-    
+  
     vendor_product=VendorProducts.objects.get(product__product_sku=product_sku)
     
     if request.GET.get('product_sku'):

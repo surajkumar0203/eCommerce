@@ -123,6 +123,7 @@ class Order(models.Model):
                 } for order_item in self.order_orderItem.all()
             ]
         }
+
         return order_data
 
 class OrderItem(models.Model):

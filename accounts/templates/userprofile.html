@@ -1,8 +1,8 @@
 {% extends "utils/base.html" %}
 {% load hide_number %}
 {% block start %}
-<div class="container mt-5">
-    <div class="card mx-auto shadow-lg p-3 bg-white rounded" style="max-width: 400px;">
+<div class="container mt-2">
+    <div class="card mx-auto shadow-lg p-3 bg-white rounded mt-2" style="max-width: 400px;">
         <p>Personal Info</p>
         <div class="card-body text-center">
             <img src="https://th.bing.com/th/id/OIP.TctatNGs7RN-Dfc3NZf91AAAAA?w=300&h=300&rs=1&pid=ImgDetMain" class="rounded-circle mb-3" width="70" alt="Profile Picture">
@@ -17,11 +17,56 @@
             <p class="card-text" title="{{aadhar_number}}"><strong>Aadhar number:</strong> <span id="aadhar_number">{{aadhar_number | aadhar_hide}}</span></p>
             <p class="card-text"><strong>Bmp id:</strong> <span id="bmp_id">{{bmp_id}}</span></p>
             <p class="card-text"><strong>Vender name:</strong> <span id="vender_name">{{vender_name}}</span></p>
+
+
         {% endif %}
     </div>
-    
+{% if request.user.is_shopkeeper %}
 </div>
+    <div class=" mt-5 mb-4 shadow-lg p-3  bg-white rounded">
+    <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Image</th>
+            <th scope="col">Brand Name</th>
+            <th scope="col">Category Name</th>
+            <th scope="col">Category Comission percentage</th>
+            <th scope="col">Variant name</th>
+            <th scope="col">Option name</th>
+            <th scope="col">Item Name</th>
+            <th scope="col">Product sku</th>
+            <th scope="col">Hsn code</th>
+            <th scope="col">Maximum retail price</th>
+            <th scope="col">Vendor selling price</th>
+            <th scope="col">Dealer price</th>
+            <th scope="col">Delivery price</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for vender_product in vender_products %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td><a href="{% url "product_details" vender_product.product.product_sku %}"><img src="/media/{{vender_product.product.getFirstImage.1}}" width=60 alt="/media/{{vender_products.product.getFirstImage.1}}"/></a></td>
+            <td>{{vender_product.product.brand}}</td>
+            <td>{{vender_product.product.category.name}}</td>
+            <td>{{vender_product.product.category.comission_percentage}}</td>
+            <td>{{vender_product.product.all__product_variants.variant_name}}</td>
+            <td>{{vender_product.product.category.comission_percentage}}</td>
+            <td>{{vender_product.product.item_name}}</td>
+            <td>{{vender_product.product.product_sku}}</td>
+            <td>{{vender_product.product.hsn_code}}</td>
+            <td>{{vender_product.product.maximum_retail_price}}</td>
+            <td>{{vender_product.vendor_selling_price}}</td>
+            <td>{{vender_product.dealer_price}}</td>
+            <td>{{vender_product.delivery_price}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      
+    </div>
+{% endif %}
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+{% comment %} <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> {% endcomment %}
 
 {% endblock start %}

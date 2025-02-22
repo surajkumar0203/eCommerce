@@ -32,6 +32,7 @@ def generate_code(value=None):
 
 def generate_order_pdf(instance):
     templates_name = 'order/invoice'
+ 
     options = {
         'page-size': 'A4',
         'margin-top': '0.75in',
@@ -48,13 +49,11 @@ def generate_order_pdf(instance):
 
     }
 
-    path_to_wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+
     template = get_template(f'{templates_name}.html')
     content = template.render({'order_item':instance.get_order_data()})
     output_path = f"{settings.BASE_DIR}/public/static/pdfs/{instance.order_id}.pdf"
-    
-    config=pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
-  
+    config=pdfkit.configuration()
     pdfkit.from_string(content,output_path,options=options,configuration=config)
 
 
