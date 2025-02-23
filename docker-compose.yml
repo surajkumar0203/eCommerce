@@ -1,0 +1,45 @@
+services:
+  e-commerce-website:  # Name of the service
+    build: .
+    ports:
+      - 8000:8000
+
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+
+    depends_on:
+      - db
+      - redis_queue
+    volumes:
+      - .:/Ecommerce
+
+    networks:
+      - my_network
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_DB: eCommerce_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    volumes:
+      - volume_postgre_data:/var/lib/postgresql/data
+    ports:
+      - "5438:5432"
+    networks:
+      - my_network
+
+  redis_queue:
+    image: redis:alpine3.21
+    ports:
+      - "6376:6379"
+    depends_on:
+      - db
+    networks:
+      - my_network
+
+volumes:
+  volume_postgre_data:
+
+networks:
+  my_network:
+    driver: bridge 
