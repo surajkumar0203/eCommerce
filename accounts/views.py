@@ -97,7 +97,7 @@ def shopkeeper_login(request):
             if shopkeeper_obj is not None:
                 login(request, shopkeeper_obj)
                 messages.success(request,"Login Successfully")
-                return redirect('/products/upload/')
+                return redirect('/')
             messages.success(request,"Invalid Credentials")
             return redirect('/')
 
@@ -152,5 +152,4 @@ def account_user_profile(request):
         context['bmp_id']=shopkeeper.bmp_id
         context['vender_name']=shopkeeper.vender_name
         context['vender_products']=vender_products
-        # print(vender_products.product.product.objects.all())
     return render(request,'userprofile.html',context)

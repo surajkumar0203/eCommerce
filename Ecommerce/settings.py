@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'home.context.brand_name'
             ],
         },
     },
@@ -154,8 +155,8 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("redis_queue", 6379)],
-            # "hosts": [("127.0.0.1", 6379)],
+            # "hosts": [("redis_queue", 6379)], # for Docker
+            "hosts": [("127.0.0.1", 6379)],
         },
     },
 }

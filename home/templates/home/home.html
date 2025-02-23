@@ -2,7 +2,48 @@
 {% load static %}
 
 {% block start %}
+
+{% comment %} start pagination {% endcomment %}
+<div class="container navbar navbar-expand">
+  
+   
+   
+    <nav class="navbar-nav ml-auto ">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link border border-0 text-light bg-primary" href="?page=1"><<</a>
+            </li>
+        {% if products.has_previous %}
+            <li class="page-item text-light bg-primary">
+                <a href="?page={{products.previous_page_number}}{%for key,value in request.GET.items %}{% if key != 'page'%}&{{key}}={{value}}{% endif %}{%endfor%}" class="page-link text-light bg-primary border border-0"><</a>
+            </li>
+        {% endif %}
+        {% for tpl in totalpage %}
+        {% if products.number == tpl %}
+        
+            <li class="page-item  text-light bg-success" aria-current="page">
+                <a class="page-link text-primary bg-light border border-0" href="?page={{tpl}}{%for key,value in request.GET.items %}{% if key != 'page'%}&{{key}}={{value}}{% endif %}{%endfor%}">{{tpl}}</a>
+            </li>
+            {% else %}
+            <li class="page-item" aria-current="page">
+                <a class="page-link text-light bg-primary border border-0" href="?page={{tpl}}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{tpl}}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+        {% if products.has_next %}
+            <li class="page-item">
+                <a class="page-link text-light bg-primary border border-0" href="?page={{products.next_page_number}}{%for key,value in request.GET.items %}{% if key != 'page'%}&{{key}}={{value}}{% endif %}{%endfor%}">></a>
+            </li>
+        {% endif %}
+        <li class="page-item">
+            <a class="page-link text-light bg-primary border border-0" href="?page={{lastpage}}{%for key,value in request.GET.items %}{% if key != 'page'%}&{{key}}={{value}}{% endif %}{%endfor%}">>></a>
+        </li>
+        </ul>
+    </nav>
+</div>
+{% comment %} end pagination {% endcomment %}
     <div class="products">
+        
         <div class="container">
            
             <h1 class="pt-5 pb-5">Popular Products</h1>

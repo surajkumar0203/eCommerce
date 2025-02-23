@@ -10,22 +10,21 @@
                     alt="{% static 'images/logo.png' %}" class="img-fluid">
             </a>
         </div>
-
-        <!-- Search Bar Section -->
-        <div class="col-md-7">
-            <form method="GET">
-            <div class="input-group mt-3">
-                <input type="text" value="{%if search %}{{search}}{% else %}{% endif %}" name="search" class="form-control" placeholder="Search" 
-                    aria-label="Recipient's username" aria-describedby="button-addon2">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit" id="button-addon2">
-                        <i class="fas fa-search"></i>
-                    </button>
+            <!-- Search Bar Section -->
+            <div class="col-md-7">
+                <form method="GET" action="/">
+                <div class="input-group mt-3">
+                    <input type="text" value="{%if search %}{{search}}{% else %}{% endif %}" name="search" class="form-control" id="Search" placeholder="Search" 
+                        aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit" id="button-addon2">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
                 </div>
+            </form>
             </div>
-        </form>
-        </div>
-        
+
         <!-- User & Cart Section -->
         
                 {% if request.user.is_authenticated %}
@@ -76,3 +75,4 @@
             {% endif %}
         </div>
 </div>
+

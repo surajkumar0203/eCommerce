@@ -1,14 +1,15 @@
 from django.shortcuts import render
-from products.models import Category,VendorProducts,ProductVariant,Products
+from products.models import Category,VendorProducts,ProductVariant
 from django.db.models import Q
 from orders.models import *
 from accounts.models import Customer
 from django.contrib.postgres.search import SearchVector,SearchQuery,SearchRank,TrigramSimilarity
-from utils.utility import is_shopkeeper
+
+from django.core.paginator import Paginator
+
 
 def home(request):
     categories = Category.objects.all()
-    
     """
     dono ka result same hoga, lekin Q objects ka use karne se code zyada readable aur maintainable hota hai.
 
@@ -51,17 +52,39 @@ def home(request):
             product__product_images__isnull=False
         )
     else:
-        # Agar sirf AND conditions use karni hai, toh ye style zyada readable aur simple hai.
-        products = VendorProducts.objects.filter(
-            product__parent_product__isnull=True,
-            product__product_images__isnull=False
-        )
+        
+        if request.GET.get('brand'):
+            products = VendorProducts.objects.filter(
+                Q(product__parent_product__isnull=True),
+                Q(product__product_images__isnull=False),
+                Q(product__brand__name=request.GET.get('brand'))
+                
+            )
+           
+        else:
+            # Agar sirf AND conditions use karni hai, toh ye style zyada readable aur simple hai.
+            products = VendorProducts.objects.filter(
+                Q(product__parent_product__isnull=True),
+                Q(product__product_images__isnull=False)
+                
+            )
+    paginator = Paginator(products, 12)
+    page_number=request.GET.get('page') # get page number from client
+    finalData=paginator.get_page(page_number) # show current page
+    totalpage=paginator.page_range
  
+  
+  
+    
     context = {
-        "products" : products,
-        "search":search
+        "products" : finalData,
+        "search":search,
+        "totalpage":totalpage,
+        "lastpage":paginator.page_range[-1]
     }
-    return render(request, 'home/home.html',context)
+    return render(request,'home/home.html',context)
+
+
 
 
 def product_details(request,product_sku):
@@ -137,7 +160,8 @@ def product_details(request,product_sku):
     context={
         "product":vendor_product,
         "product_variants_result":result,
-        "cart_quantity":cart_quantity
+        "cart_quantity":cart_quantity,
+      
     }
     
     return render(request, 'home/product_details.html',context)

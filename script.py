@@ -63,8 +63,8 @@ def upload_products():   #1
                         brand=brand,
                         item_name=row["Item name title"],
                         product_description=row["Product description"],
-                        product_sku=row["Product SKU"],
-                        hsn_code=row["HSN code"],
+                        # product_sku=row["Product SKU"],
+                        # hsn_code=row["HSN code"],
                         maximum_retail_price=random.randint(5000, 260000)
                     )
                     
