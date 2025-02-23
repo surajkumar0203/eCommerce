@@ -88,8 +88,8 @@ CHANNEL_LAYERS = {
 ### Installation
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo
+   git clone https://github.com/surajkumar0203/eCommerce.git
+   cd eCommerce
    ```
 
 2. **Set up environment variables:**
