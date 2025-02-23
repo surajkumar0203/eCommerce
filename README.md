@@ -59,18 +59,21 @@ CHANNEL_LAYERS = {
 
 ## 📸 Screenshots
 
-- **Home Page:** `screenshots/Homepage.png`
-- **Customer Dashboard:** `screenshots/customer_dashboard.png`
-- **Shopkeeper Dashboard:** `screenshots/shopkeeper_dashboard.png`
-- **Order Tracking:** `screenshots/order_tracking.png`
-- **Payment Page:** `screenshots/payment_page.png`
-
-Include them in the README like:
-```markdown
 ![Home_Page](https://github.com/surajkumar0203/eCommerce/blob/branch1/screenshorts/Homepage.png?raw=true)
-![Order Tracking](screenshots/order_tracking.png)
-![Payment Page](screenshots/payment_page.png)
-```
+
+ **Home Page**
+
+![MyOrder_Page](https://github.com/surajkumar0203/eCommerce/blob/branch1/screenshorts/MyOrder.png?raw=true)
+
+ **MyOrder Page**
+
+![OrderTrack_Page](https://github.com/surajkumar0203/eCommerce/blob/branch1/screenshorts/OrderTrack.png?raw=true)
+
+ **OrderTrack Page**
+
+![Shopkeeper_Page](https://github.com/surajkumar0203/eCommerce/blob/branch1/screenshorts/Shopkeeper.png?raw=true)
+
+ **Shopkeeper_Page**
 
 ---
 
