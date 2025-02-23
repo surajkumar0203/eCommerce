@@ -67,7 +67,7 @@ CHANNEL_LAYERS = {
 
 Include them in the README like:
 ```markdown
-![Home Page](https://github.com/surajkumar0203/eCommerce/blob/branch1/screenshorts/Homepage.png?raw=true)
+![Home_Page](https://github.com/surajkumar0203/eCommerce/blob/branch1/screenshorts/Homepage.png?raw=true)
 ![Order Tracking](screenshots/order_tracking.png)
 ![Payment Page](screenshots/payment_page.png)
 ```
